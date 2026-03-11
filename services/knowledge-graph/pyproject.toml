@@ -4,6 +4,20 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "mcp-shared",
+    "mcp>=1.0.0",
+    "asyncpg>=0.30.0",
+    "google-cloud-aiplatform>=1.40.0",
+    "uvicorn>=0.27.0",
+    "starlette>=0.36.0",
+    "python-dotenv>=1.0.0",
+    "alembic>=1.13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
 ]
 
 [tool.uv.sources]
@@ -12,3 +26,7 @@ mcp-shared = { workspace = true }
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
