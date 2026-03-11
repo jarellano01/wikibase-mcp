@@ -1,0 +1,107 @@
+name: Deploy MCP Service (Reusable)
+
+on:
+  workflow_call:
+    inputs:
+      service-name:
+        required: true
+        type: string
+      service-path:
+        required: true
+        type: string
+        description: "Path to the service directory, e.g. services/reporting"
+      memory:
+        required: false
+        type: string
+        default: "1Gi"
+      cpu:
+        required: false
+        type: string
+        default: "1"
+      timeout:
+        required: false
+        type: number
+        default: 300
+      max-instances:
+        required: false
+        type: number
+        default: 1
+      secrets-list:
+        required: false
+        type: string
+        default: ""
+        description: "Comma-separated --set-secrets flags"
+      env-vars:
+        required: false
+        type: string
+        default: ""
+        description: "Comma-separated env vars"
+    secrets:
+      GCP_PROJECT_ID:
+        required: true
+      WIF_PROVIDER:
+        required: true
+      WIF_SERVICE_ACCOUNT:
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install uv
+        run: pip install uv
+      - name: Install dependencies
+        run: uv sync
+      - name: Run tests
+        run: uv run pytest ${{ inputs.service-path }}/tests/ -v
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      SERVICE: ${{ inputs.service-name }}
+      REGION: us-central1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+      - name: Build and push
+        run: |
+          docker build -f ${{ inputs.service-path }}/Dockerfile -t gcr.io/$PROJECT_ID/$SERVICE .
+          docker push gcr.io/$PROJECT_ID/$SERVICE
+      - name: Deploy to Cloud Run
+        run: |
+          DEPLOY_CMD="gcloud run deploy $SERVICE \
+            --image gcr.io/$PROJECT_ID/$SERVICE \
+            --region $REGION \
+            --min-instances 0 \
+            --max-instances ${{ inputs.max-instances }} \
+            --memory ${{ inputs.memory }} \
+            --cpu ${{ inputs.cpu }} \
+            --timeout ${{ inputs.timeout }} \
+            --concurrency 1 \
+            --port 8080 \
+            --allow-unauthenticated"
+
+          if [ -n "${{ inputs.secrets-list }}" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --set-secrets=${{ inputs.secrets-list }}"
+          fi
+
+          if [ -n "${{ inputs.env-vars }}" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --set-env-vars=${{ inputs.env-vars }}"
+          fi
+
+          eval $DEPLOY_CMD
