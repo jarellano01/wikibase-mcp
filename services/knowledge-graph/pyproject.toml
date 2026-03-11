@@ -1,0 +1,14 @@
+[project]
+name = "knowledge-graph-mcp"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp-shared",
+]
+
+[tool.uv.sources]
+mcp-shared = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
