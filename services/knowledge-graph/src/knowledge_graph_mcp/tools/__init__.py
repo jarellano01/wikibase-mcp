@@ -1,1 +1,1 @@
-"""Knowledge Graph MCP tools."""
+"""Knowledge Graph MCP tool modules."""
