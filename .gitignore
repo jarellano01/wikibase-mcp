@@ -28,5 +28,8 @@ htmlcov/
 # OS
 .DS_Store
 
+# Roadmap (private specs/plans)
+roadmap/
+
 # uv
 uv.lock
