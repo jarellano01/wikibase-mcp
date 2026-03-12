@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { sql, eq, and, inArray } from "drizzle-orm";
+import { sql, eq, and, inArray, like } from "drizzle-orm";
 import type { Db } from "../db/index.js";
 import type { Config } from "../config.js";
 import { embedText } from "../embeddings.js";
@@ -161,6 +161,165 @@ export function registerKnowledgeTools(
               key: candidate.key,
             }),
           },
+        ],
+      };
+    },
+  );
+
+  server.tool(
+    "update_knowledge",
+    "Update fields on an existing knowledge entry (by ID or key)",
+    {
+      id: z.number().optional().describe("Entry ID"),
+      key: z.string().optional().describe("Entry key (alternative to ID)"),
+      content: z.string().optional().describe("New content"),
+      category: z.string().optional().describe("New category"),
+      scope: z.string().optional().describe("New scope"),
+      tags: z.array(z.string()).optional().describe("New tags"),
+    },
+    async ({ id, key, content, category, scope, tags }) => {
+      if (!id && !key) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({ error: "Provide either id or key" }),
+            },
+          ],
+        };
+      }
+
+      const updates: Record<string, unknown> = { updatedAt: new Date() };
+      if (content !== undefined) {
+        updates.content = content;
+        updates.embedding = await embedText(
+          content,
+          config.gcpProjectId,
+          config.gcpLocation,
+        );
+      }
+      if (category !== undefined) updates.category = category;
+      if (scope !== undefined) updates.scope = scope;
+      if (tags !== undefined) updates.tags = tags;
+
+      const condition = id
+        ? eq(knowledgeBase.id, id)
+        : eq(knowledgeBase.key, key!);
+
+      const [updated] = await db
+        .update(knowledgeBase)
+        .set(updates)
+        .where(condition)
+        .returning({
+          id: knowledgeBase.id,
+          key: knowledgeBase.key,
+          scope: knowledgeBase.scope,
+        });
+
+      if (!updated) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({ error: "Entry not found" }),
+            },
+          ],
+        };
+      }
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({ status: "updated", ...updated }),
+          },
+        ],
+      };
+    },
+  );
+
+  server.tool(
+    "delete_knowledge",
+    "Delete knowledge entries by ID, key, or scope",
+    {
+      id: z.number().optional().describe("Entry ID to delete"),
+      key: z.string().optional().describe("Entry key to delete"),
+      scope: z
+        .string()
+        .optional()
+        .describe("Delete ALL entries in this scope"),
+    },
+    async ({ id, key, scope }) => {
+      if (!id && !key && !scope) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({
+                error: "Provide id, key, or scope",
+              }),
+            },
+          ],
+        };
+      }
+
+      let condition;
+      if (id) condition = eq(knowledgeBase.id, id);
+      else if (key) condition = eq(knowledgeBase.key, key);
+      else condition = eq(knowledgeBase.scope, scope!);
+
+      const deleted = await db
+        .delete(knowledgeBase)
+        .where(condition)
+        .returning({ id: knowledgeBase.id, key: knowledgeBase.key });
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify({
+              status: "deleted",
+              count: deleted.length,
+              entries: deleted,
+            }),
+          },
+        ],
+      };
+    },
+  );
+
+  server.tool(
+    "list_knowledge",
+    "List knowledge entries with optional filters (no vector search)",
+    {
+      scope: z.string().optional().describe("Filter by scope"),
+      category: z.string().optional().describe("Filter by category"),
+      limit: z.number().optional().default(50).describe("Max results"),
+    },
+    async ({ scope, category, limit }) => {
+      const conditions: ReturnType<typeof eq>[] = [];
+      if (scope) conditions.push(eq(knowledgeBase.scope, scope));
+      if (category) conditions.push(eq(knowledgeBase.category, category));
+
+      const results = await db
+        .select({
+          id: knowledgeBase.id,
+          category: knowledgeBase.category,
+          key: knowledgeBase.key,
+          content: knowledgeBase.content,
+          scope: knowledgeBase.scope,
+          tags: knowledgeBase.tags,
+          source: knowledgeBase.source,
+          createdAt: knowledgeBase.createdAt,
+          updatedAt: knowledgeBase.updatedAt,
+        })
+        .from(knowledgeBase)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .limit(limit ?? 50);
+
+      return {
+        content: [
+          { type: "text" as const, text: JSON.stringify(results, null, 2) },
         ],
       };
     },
