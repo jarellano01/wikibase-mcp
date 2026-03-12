@@ -11,7 +11,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
         self.api_key = api_key
 
     async def dispatch(self, request: Request, call_next):
-        if request.url.path == "/health":
+        path = request.url.path
+        # Skip auth for health, MCP/SSE endpoints, and OAuth discovery probes
+        if (
+            path == "/health"
+            or path in ("/sse", "/message")
+            or path.startswith("/.well-known/")
+        ):
             return await call_next(request)
         auth = request.headers.get("Authorization", "")
         if not auth.startswith("Bearer ") or auth[7:] != self.api_key:
