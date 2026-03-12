@@ -56,21 +56,21 @@ async function main() {
       return;
     }
 
-    // New session
+    // New session — generate ID upfront so we can store before handling
+    const newSessionId = crypto.randomUUID();
     const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: () => crypto.randomUUID(),
+      sessionIdGenerator: () => newSessionId,
     });
     const mcpServer = createMcpServer(db, config);
 
     transport.onclose = () => {
-      const id = transport.sessionId;
-      if (id) httpSessions.delete(id);
+      httpSessions.delete(newSessionId);
     };
 
     await mcpServer.connect(transport);
 
-    const id = transport.sessionId;
-    if (id) httpSessions.set(id, { transport, server: mcpServer });
+    // Store BEFORE handleRequest so the follow-up request finds it
+    httpSessions.set(newSessionId, { transport, server: mcpServer });
 
     await transport.handleRequest(req, res, req.body);
   });
