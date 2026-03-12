@@ -56,6 +56,16 @@ async function main() {
       return;
     }
 
+    // Stale session ID — tell client to re-initialize
+    if (sessionId) {
+      res.status(404).json({
+        jsonrpc: "2.0",
+        error: { code: -32000, message: "Session expired" },
+        id: null,
+      });
+      return;
+    }
+
     // New session — generate ID upfront so we can store before handling
     const newSessionId = crypto.randomUUID();
     const transport = new StreamableHTTPServerTransport({
@@ -79,7 +89,11 @@ async function main() {
     const sessionId = req.headers["mcp-session-id"] as string;
     const session = httpSessions.get(sessionId);
     if (!session) {
-      res.status(400).json({ error: "No active session" });
+      res.status(404).json({
+        jsonrpc: "2.0",
+        error: { code: -32000, message: "Session expired" },
+        id: null,
+      });
       return;
     }
     await session.transport.handleRequest(req, res);
