@@ -1,0 +1,23 @@
+[project]
+name = "ai-mcp"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "mcp-shared",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+mcp-shared = { workspace = true }
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
