@@ -24,7 +24,6 @@ def upgrade() -> None:
         sa.Column("category", sa.Text, nullable=False),
         sa.Column("key", sa.Text, nullable=False, unique=True),
         sa.Column("content", sa.Text, nullable=False),
-        sa.Column("embedding", sa.LargeBinary),  # vector(768) — raw SQL below
         sa.Column("scope", sa.Text, nullable=False, server_default="global"),
         sa.Column("tags", sa.ARRAY(sa.Text), server_default=sa.text("'{}'::text[]")),
         sa.Column("source", sa.Text, nullable=False, server_default="manual"),
@@ -33,8 +32,7 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()")),
         schema="knowledge_graph",
     )
-    # Replace the LargeBinary placeholder with actual vector type
-    op.execute("ALTER TABLE knowledge_graph.knowledge_base ALTER COLUMN embedding TYPE vector(768) USING embedding::vector(768)")
+    op.execute("ALTER TABLE knowledge_graph.knowledge_base ADD COLUMN embedding vector(768)")
     op.create_index("idx_kb_scope", "knowledge_base", ["scope"], schema="knowledge_graph")
     op.execute("CREATE INDEX idx_kb_tags ON knowledge_graph.knowledge_base USING gin(tags)")
 
@@ -58,11 +56,10 @@ def upgrade() -> None:
         sa.Column("entry_type", sa.Text, nullable=False),
         sa.Column("content", sa.Text, nullable=False),
         sa.Column("metadata", JSONB, server_default=sa.text("'{}'::jsonb")),
-        sa.Column("embedding", sa.LargeBinary),  # vector(768) — raw SQL below
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()")),
         schema="knowledge_graph",
     )
-    op.execute("ALTER TABLE knowledge_graph.session_entries ALTER COLUMN embedding TYPE vector(768) USING embedding::vector(768)")
+    op.execute("ALTER TABLE knowledge_graph.session_entries ADD COLUMN embedding vector(768)")
     op.create_unique_constraint("uq_session_sequence", "session_entries", ["session_id", "sequence"], schema="knowledge_graph")
 
     op.create_table(
@@ -71,7 +68,6 @@ def upgrade() -> None:
         sa.Column("category", sa.Text, nullable=False),
         sa.Column("key", sa.Text, nullable=False),
         sa.Column("content", sa.Text, nullable=False),
-        sa.Column("embedding", sa.LargeBinary),  # vector(768)
         sa.Column("rationale", sa.Text),
         sa.Column("scope", sa.Text, nullable=False, server_default="global"),
         sa.Column("tags", sa.ARRAY(sa.Text), server_default=sa.text("'{}'::text[]")),
@@ -82,7 +78,7 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()")),
         schema="knowledge_graph",
     )
-    op.execute("ALTER TABLE knowledge_graph.knowledge_candidates ALTER COLUMN embedding TYPE vector(768) USING embedding::vector(768)")
+    op.execute("ALTER TABLE knowledge_graph.knowledge_candidates ADD COLUMN embedding vector(768)")
 
 
 def downgrade() -> None:
