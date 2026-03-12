@@ -324,4 +324,114 @@ export function registerKnowledgeTools(
       };
     },
   );
+
+  server.tool(
+    "scope_index",
+    "Get a lightweight overview of knowledge by scope — category counts, keys, and last update. Use this first before pulling full content.",
+    {
+      scope: z
+        .string()
+        .optional()
+        .describe("Scope to index. Omit to get stats for ALL scopes."),
+    },
+    async ({ scope }) => {
+      if (scope) {
+        // Single scope: category breakdown + all keys
+        const rows = await db
+          .select({
+            category: knowledgeBase.category,
+            key: knowledgeBase.key,
+            tags: knowledgeBase.tags,
+            updatedAt: knowledgeBase.updatedAt,
+          })
+          .from(knowledgeBase)
+          .where(eq(knowledgeBase.scope, scope));
+
+        const categories: Record<string, string[]> = {};
+        let lastUpdated: Date | null = null;
+
+        for (const row of rows) {
+          if (!categories[row.category]) categories[row.category] = [];
+          categories[row.category].push(row.key);
+          if (!lastUpdated || (row.updatedAt && row.updatedAt > lastUpdated)) {
+            lastUpdated = row.updatedAt;
+          }
+        }
+
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify(
+                {
+                  scope,
+                  total_entries: rows.length,
+                  categories: Object.fromEntries(
+                    Object.entries(categories).map(([cat, keys]) => [
+                      cat,
+                      { count: keys.length, keys },
+                    ]),
+                  ),
+                  last_updated: lastUpdated,
+                },
+                null,
+                2,
+              ),
+            },
+          ],
+        };
+      }
+
+      // All scopes overview
+      const rows = await db
+        .select({
+          scope: knowledgeBase.scope,
+          category: knowledgeBase.category,
+          updatedAt: knowledgeBase.updatedAt,
+        })
+        .from(knowledgeBase);
+
+      const scopes: Record<
+        string,
+        { total: number; categories: Record<string, number>; lastUpdated: Date | null }
+      > = {};
+
+      for (const row of rows) {
+        if (!scopes[row.scope]) {
+          scopes[row.scope] = { total: 0, categories: {}, lastUpdated: null };
+        }
+        const s = scopes[row.scope];
+        s.total++;
+        s.categories[row.category] = (s.categories[row.category] || 0) + 1;
+        if (!s.lastUpdated || (row.updatedAt && row.updatedAt > s.lastUpdated)) {
+          s.lastUpdated = row.updatedAt;
+        }
+      }
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(
+              {
+                total_entries: rows.length,
+                scopes: Object.fromEntries(
+                  Object.entries(scopes).map(([name, data]) => [
+                    name,
+                    {
+                      entries: data.total,
+                      categories: data.categories,
+                      last_updated: data.lastUpdated,
+                    },
+                  ]),
+                ),
+              },
+              null,
+              2,
+            ),
+          },
+        ],
+      };
+    },
+  );
 }
