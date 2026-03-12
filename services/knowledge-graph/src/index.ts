@@ -1,0 +1,80 @@
+import express from "express";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { loadConfig, type Config } from "./config.js";
+import { createDb, type Db } from "./db/index.js";
+import { runMigrations } from "./db/migrate.js";
+import { authMiddleware } from "./auth.js";
+import { registerKnowledgeTools } from "./tools/knowledge.js";
+import { registerSessionTools } from "./tools/sessions.js";
+import { registerLearningTools } from "./tools/learning.js";
+
+function createMcpServer(db: Db, config: Config): McpServer {
+  const server = new McpServer({
+    name: "Knowledge Graph MCP",
+    version: "0.1.0",
+  });
+
+  registerKnowledgeTools(server, db, config);
+  registerSessionTools(server, db, config);
+  registerLearningTools(server, db, config);
+
+  return server;
+}
+
+async function main() {
+  const config = loadConfig();
+
+  console.log("Running database migrations...");
+  await runMigrations(config.databaseUrl);
+
+  const db = createDb(config.databaseUrl);
+
+  const app = express();
+  app.use(express.json());
+  app.use(authMiddleware(config.apiKey));
+
+  app.get("/health", (_req, res) => {
+    res.json({ status: "ok", service: "knowledge-graph-mcp" });
+  });
+
+  // SSE transport — one MCP server instance per client connection
+  const activeSessions = new Map<
+    string,
+    { transport: SSEServerTransport; server: McpServer }
+  >();
+
+  app.get("/sse", async (req, res) => {
+    const mcpServer = createMcpServer(db, config);
+    const transport = new SSEServerTransport("/message", res);
+    activeSessions.set(transport.sessionId, {
+      transport,
+      server: mcpServer,
+    });
+
+    res.on("close", () => {
+      activeSessions.delete(transport.sessionId);
+    });
+
+    await mcpServer.connect(transport);
+  });
+
+  app.post("/message", async (req, res) => {
+    const sessionId = req.query.sessionId as string;
+    const session = activeSessions.get(sessionId);
+    if (!session) {
+      res.status(400).json({ error: "Unknown session" });
+      return;
+    }
+    await session.transport.handlePostMessage(req, res);
+  });
+
+  app.listen(config.port, () => {
+    console.log(`Knowledge Graph MCP running on port ${config.port}`);
+  });
+}
+
+main().catch((err) => {
+  console.error("Fatal error:", err);
+  process.exit(1);
+});

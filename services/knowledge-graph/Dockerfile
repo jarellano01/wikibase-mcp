@@ -1,19 +1,18 @@
-FROM python:3.12-slim
+FROM node:22-slim AS builder
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
-
-RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev gcc && rm -rf /var/lib/apt/lists/*
-
-# Copy shared package
-COPY packages/shared/ /packages/shared/
-
-# Copy service + Alembic
-COPY services/knowledge-graph/pyproject.toml .
+COPY services/knowledge-graph/package.json services/knowledge-graph/pnpm-lock.yaml* ./
+RUN pnpm install --frozen-lockfile
+COPY services/knowledge-graph/tsconfig.json ./
 COPY services/knowledge-graph/src/ src/
-COPY services/knowledge-graph/alembic.ini .
-COPY services/knowledge-graph/alembic/ alembic/
+RUN pnpm run build
 
-# Install shared then service
-RUN pip install --no-cache-dir /packages/shared/ && pip install --no-cache-dir .
-
+FROM node:22-slim
+RUN corepack enable && corepack prepare pnpm@latest --activate
+WORKDIR /app
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile --prod
+COPY --from=builder /app/dist/ dist/
+COPY services/knowledge-graph/drizzle/ drizzle/
 EXPOSE 8080
-CMD ["python", "-m", "knowledge_graph_mcp"]
+CMD ["node", "dist/index.js"]

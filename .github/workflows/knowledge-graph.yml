@@ -5,27 +5,31 @@ on:
     branches: [main]
     paths:
       - "services/knowledge-graph/**"
-      - "packages/shared/**"
   pull_request:
     branches: [main]
     paths:
       - "services/knowledge-graph/**"
-      - "packages/shared/**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: "3.12"
-      - name: Install uv
-        run: pip install uv
+          node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
       - name: Install dependencies
-        run: uv sync --dev
+        working-directory: services/knowledge-graph
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        working-directory: services/knowledge-graph
+        run: pnpm run build
       - name: Run tests
-        run: uv run pytest services/knowledge-graph/tests/ -v
+        working-directory: services/knowledge-graph
+        run: pnpm test
 
   build-and-push:
     needs: test
