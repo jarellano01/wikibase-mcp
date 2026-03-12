@@ -13,12 +13,3 @@ jobs:
     with:
       service-name: reporting-mcp
       service-path: services/reporting
-      memory: 1Gi
-      cpu: "1"
-      timeout: 300
-      max-instances: 1
-      secrets-list: "DATABASE_URL=database-url:latest,TARGET_DATABASE_URL=target-database-url:latest,API_KEY=reporting-api-key:latest"
-    secrets:
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
-      WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}

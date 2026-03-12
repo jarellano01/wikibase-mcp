@@ -13,13 +13,3 @@ jobs:
     with:
       service-name: knowledge-graph-mcp
       service-path: services/knowledge-graph
-      memory: 512Mi
-      cpu: "1"
-      timeout: 60
-      max-instances: 1
-      secrets-list: "DATABASE_URL=database-url:latest,API_KEY=kg-api-key:latest,GCP_PROJECT_ID=gcp-project-id:latest"
-      env-vars: "GCP_LOCATION=us-central1"
-    secrets:
-      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      WIF_PROVIDER: ${{ secrets.WIF_PROVIDER }}
-      WIF_SERVICE_ACCOUNT: ${{ secrets.WIF_SERVICE_ACCOUNT }}
