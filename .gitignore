@@ -31,5 +31,8 @@ htmlcov/
 # Roadmap (private specs/plans)
 roadmap/
 
+# Node
+node_modules/
+
 # uv
 uv.lock

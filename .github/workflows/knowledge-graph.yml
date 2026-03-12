@@ -50,7 +50,6 @@ jobs:
           images: ${{ env.IMAGE }}
           tags: |
             type=sha
-            type=raw,value=latest,enable=${{ github.event_name == 'push' }}
             type=raw,value=dev-{{sha}},enable=${{ github.event_name == 'pull_request' }}
             type=raw,value=pr-${{ github.event.pull_request.number }},enable=${{ github.event_name == 'pull_request' }}
       - name: Build and push

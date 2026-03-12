@@ -3,7 +3,6 @@ name = "ai-mcp"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "reporting-mcp",
     "mcp-shared",
 ]
 
@@ -15,10 +14,9 @@ dev = [
 ]
 
 [tool.uv.workspace]
-members = ["services/*", "packages/*"]
+members = ["packages/*"]
 
 [tool.uv.sources]
-reporting-mcp = { workspace = true }
 mcp-shared = { workspace = true }
 
 [tool.pytest.ini_options]
