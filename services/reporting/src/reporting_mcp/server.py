@@ -49,7 +49,10 @@ async def startup():
     settings = Settings()
 
     # Auto-migrate reporting schema
+    # In Docker the alembic dir is at /app/alembic; locally it's relative to the source tree
     alembic_dir = os.path.join(os.path.dirname(__file__), "..", "..", "alembic")
+    if not os.path.isdir(alembic_dir):
+        alembic_dir = os.path.join(os.getcwd(), "alembic")
     await run_migrations(settings.database_url, alembic_dir, SCHEMA)
 
     db = DatabaseManager(settings.target_database_url, settings.database_url)
