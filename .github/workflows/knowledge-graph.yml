@@ -6,6 +6,11 @@ on:
     paths:
       - "services/knowledge-graph/**"
       - "packages/shared/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "services/knowledge-graph/**"
+      - "packages/shared/**"
 
 jobs:
   deploy:

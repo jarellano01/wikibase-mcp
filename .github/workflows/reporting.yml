@@ -6,6 +6,11 @@ on:
     paths:
       - "services/reporting/**"
       - "packages/shared/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "services/reporting/**"
+      - "packages/shared/**"
 
 jobs:
   deploy:
