@@ -1,6 +1,8 @@
+import crypto from "crypto";
 import express from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { loadConfig, type Config } from "./config.js";
 import { createDb, type Db } from "./db/index.js";
 import { runMigrations } from "./db/migrate.js";
@@ -38,8 +40,63 @@ async function main() {
     res.json({ status: "ok", service: "knowledge-graph-mcp" });
   });
 
-  // SSE transport — one MCP server instance per client connection
-  const activeSessions = new Map<
+  // ── Streamable HTTP transport (preferred by Claude Code) ──────────
+  const httpSessions = new Map<
+    string,
+    { transport: StreamableHTTPServerTransport; server: McpServer }
+  >();
+
+  app.post("/mcp", async (req, res) => {
+    const sessionId = req.headers["mcp-session-id"] as string | undefined;
+
+    // Existing session — route to its transport
+    if (sessionId && httpSessions.has(sessionId)) {
+      const session = httpSessions.get(sessionId)!;
+      await session.transport.handleRequest(req, res, req.body);
+      return;
+    }
+
+    // New session
+    const transport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: () => crypto.randomUUID(),
+    });
+    const mcpServer = createMcpServer(db, config);
+
+    transport.onclose = () => {
+      const id = transport.sessionId;
+      if (id) httpSessions.delete(id);
+    };
+
+    await mcpServer.connect(transport);
+
+    const id = transport.sessionId;
+    if (id) httpSessions.set(id, { transport, server: mcpServer });
+
+    await transport.handleRequest(req, res, req.body);
+  });
+
+  app.get("/mcp", async (req, res) => {
+    const sessionId = req.headers["mcp-session-id"] as string;
+    const session = httpSessions.get(sessionId);
+    if (!session) {
+      res.status(400).json({ error: "No active session" });
+      return;
+    }
+    await session.transport.handleRequest(req, res);
+  });
+
+  app.delete("/mcp", async (req, res) => {
+    const sessionId = req.headers["mcp-session-id"] as string;
+    const session = httpSessions.get(sessionId);
+    if (session) {
+      await session.transport.close();
+      httpSessions.delete(sessionId);
+    }
+    res.status(200).end();
+  });
+
+  // ── Legacy SSE transport ──────────────────────────────────────────
+  const sseSessions = new Map<
     string,
     { transport: SSEServerTransport; server: McpServer }
   >();
@@ -47,13 +104,13 @@ async function main() {
   app.get("/sse", async (req, res) => {
     const mcpServer = createMcpServer(db, config);
     const transport = new SSEServerTransport("/message", res);
-    activeSessions.set(transport.sessionId, {
+    sseSessions.set(transport.sessionId, {
       transport,
       server: mcpServer,
     });
 
     res.on("close", () => {
-      activeSessions.delete(transport.sessionId);
+      sseSessions.delete(transport.sessionId);
     });
 
     await mcpServer.connect(transport);
@@ -61,7 +118,7 @@ async function main() {
 
   app.post("/message", async (req, res) => {
     const sessionId = req.query.sessionId as string;
-    const session = activeSessions.get(sessionId);
+    const session = sseSessions.get(sessionId);
     if (!session) {
       res.status(400).json({ error: "Unknown session" });
       return;
