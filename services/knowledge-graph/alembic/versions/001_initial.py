@@ -26,7 +26,7 @@ def upgrade() -> None:
         sa.Column("content", sa.Text, nullable=False),
         sa.Column("embedding", sa.LargeBinary),  # vector(768) — raw SQL below
         sa.Column("scope", sa.Text, nullable=False, server_default="global"),
-        sa.Column("tags", sa.ARRAY(sa.Text), server_default="'{}'"),
+        sa.Column("tags", sa.ARRAY(sa.Text), server_default=sa.text("'{}'::text[]")),
         sa.Column("source", sa.Text, nullable=False, server_default="manual"),
         sa.Column("source_file", sa.Text),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()")),
@@ -57,7 +57,7 @@ def upgrade() -> None:
         sa.Column("sequence", sa.Integer, nullable=False),
         sa.Column("entry_type", sa.Text, nullable=False),
         sa.Column("content", sa.Text, nullable=False),
-        sa.Column("metadata", JSONB, server_default="'{}'"),
+        sa.Column("metadata", JSONB, server_default=sa.text("'{}'::jsonb")),
         sa.Column("embedding", sa.LargeBinary),  # vector(768) — raw SQL below
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.text("NOW()")),
         schema="knowledge_graph",
@@ -74,7 +74,7 @@ def upgrade() -> None:
         sa.Column("embedding", sa.LargeBinary),  # vector(768)
         sa.Column("rationale", sa.Text),
         sa.Column("scope", sa.Text, nullable=False, server_default="global"),
-        sa.Column("tags", sa.ARRAY(sa.Text), server_default="'{}'"),
+        sa.Column("tags", sa.ARRAY(sa.Text), server_default=sa.text("'{}'::text[]")),
         sa.Column("session_id", sa.Integer, sa.ForeignKey("knowledge_graph.sessions.id")),
         sa.Column("status", sa.Text, nullable=False, server_default="pending"),
         sa.Column("reviewed_by", sa.Text),
