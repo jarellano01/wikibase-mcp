@@ -1,0 +1,25 @@
+{
+  "name": "@ai-wiki/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "wiki": "./dist/index.js",
+    "wiki-mcp": "../mcp/dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format esm --outDir dist --dts --external @ai-wiki/db --external drizzle-orm --external postgres --external @inquirer/prompts --external commander"
+  },
+  "dependencies": {
+    "@ai-wiki/db": "workspace:*",
+    "@inquirer/prompts": "^7.3.2",
+    "commander": "^12.1.0",
+    "drizzle-orm": "^0.38.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

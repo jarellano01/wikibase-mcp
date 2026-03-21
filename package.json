@@ -1,0 +1,16 @@
+{
+  "name": "ai-wiki",
+  "private": true,
+  "packageManager": "pnpm@10.22.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "db:generate": "pnpm --filter @ai-wiki/db generate",
+    "db:migrate": "pnpm --filter @ai-wiki/db migrate",
+    "db:studio": "pnpm --filter @ai-wiki/db studio"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.3"
+  }
+}

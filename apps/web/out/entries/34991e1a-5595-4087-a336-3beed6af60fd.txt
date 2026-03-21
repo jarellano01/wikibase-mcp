@@ -1,0 +1,496 @@
+1:"$Sreact.fragment"
+2:I[3886,["577","static/chunks/577-0d4aa266a8de3102.js","177","static/chunks/app/layout-80094003b9ca0d07.js"],"Header"]
+3:I[2712,[],""]
+4:I[3566,[],""]
+6:I[4373,[],"OutletBoundary"]
+8:I[656,[],"AsyncMetadataOutlet"]
+a:I[4373,[],"ViewportBoundary"]
+c:I[4373,[],"MetadataBoundary"]
+d:"$Sreact.suspense"
+f:I[2388,[],""]
+0:{"P":null,"b":"SM-hQgsUInRt9OBZ3CT42","p":"","c":["","entries","34991e1a-5595-4087-a336-3beed6af60fd"],"i":false,"f":[[["",{"children":["entries",{"children":[["id","34991e1a-5595-4087-a336-3beed6af60fd","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[null,["$","html",null,{"lang":"en","children":["$","body",null,{"style":{"fontFamily":"system-ui, sans-serif","maxWidth":1200,"margin":"0 auto","padding":"0 2rem"},"children":[["$","$L2",null,{}],["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]]}]}]]}],{"children":["entries",["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["id","34991e1a-5595-4087-a336-3beed6af60fd","d"],["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":["$L5",null,["$","$L6",null,{"children":["$L7",["$","$L8",null,{"promise":"$@9"}]]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,[["$","$La",null,{"children":"$Lb"}],null],["$","$Lc",null,{"children":["$","div",null,{"hidden":true,"children":["$","$d",null,{"fallback":null,"children":"$Le"}]}]}]]}],false]],"m":"$undefined","G":["$f",[]],"s":false,"S":true}
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+7:null
+9:{"metadata":[["$","title","0",{"children":"AI Wiki"}],["$","meta","1",{"name":"description","content":"Personal AI knowledge base"}]],"error":null,"digest":"$undefined"}
+e:"$9:metadata"
+5:["$","div",null,{"style":{"display":"flex","gap":"3rem","alignItems":"flex-start"},"children":[["$","main",null,{"style":{"flex":"1 1 0","minWidth":0},"children":[["$","h2",null,{"style":{"marginTop":0},"children":"Building a CLI + MCP Server in a TypeScript Monorepo"}],["$","div",null,{"style":{"color":"#888","fontSize":"0.85rem","marginBottom":"1rem"},"children":["article"," · ","cli, mcp, typescript, turborepo, pnpm, drizzle, tsup"," · ","3/21/2026"]}],["$","blockquote",null,{"style":{"borderLeft":"3px solid #ddd","paddingLeft":"1rem","color":"#555","margin":"0 0 1.5rem"},"children":"Key lessons and gotchas from building a combined CLI + local MCP stdio server using TypeScript, Turborepo, pnpm workspaces, Drizzle ORM, and tsup."}],["$","div",null,{"style":{"lineHeight":1.7},"children":[["$","h1","h1-0",{"children":"Building a CLI + MCP Server in a TypeScript Monorepo"}],"\n",["$","h2","h2-0",{"children":"Architecture"}],"\n",["$","ul","ul-0",{"children":["\n",["$","li","li-0",{"children":"Turborepo monorepo with pnpm workspaces"}],"\n",["$","li","li-1",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"packages/db"}]," — shared Drizzle ORM schema, queries, config"]}],"\n",["$","li","li-2",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/cli"}]," — Commander.js CLI (",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"wiki"}]," binary)"]}],"\n",["$","li","li-3",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/mcp"}]," — local MCP stdio server (",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"wiki-mcp"}]," binary)"]}],"\n",["$","li","li-4",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/web"}]," — Next.js read-only dashboard"]}],"\n"]}],"\n",["$","h2","h2-1",{"children":"MCP Server is Just a Local Script"}],"\n",["$","p","p-0",{"children":"An MCP server does NOT need to be hosted. Claude Desktop and Claude Code spawn it as a local subprocess via stdio. The config just points to a binary:"}],"\n",["$","pre","pre-0",{"style":{"overflowX":"auto","background":"#f6f8fa","borderRadius":6,"padding":"1rem","fontSize":"0.85em","lineHeight":1.5},"children":["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"inherit","background":"transparent","borderRadius":3,"padding":0},"children":"{ \"command\": \"/absolute/path/to/wiki-mcp\" }\n"}]}],"\n",["$","p","p-1",{"children":"Always use absolute paths — Claude spawns the process in a clean environment where PATH may not include your shell's bin dirs."}],"\n",["$","h2","h2-2",{"children":"Registering with Claude Code vs Claude Desktop"}],"\n",["$","ul","ul-1",{"children":["\n",["$","li","li-0",{"children":["Claude Desktop: ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"~/Library/Application Support/Claude/claude_desktop_config.json"}]]}],"\n",["$","li","li-1",{"children":["Claude Code: ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"claude mcp add <name> <absolute-path> --scope user"}]," (writes to ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"~/.claude.json"}],")"]}],"\n",["$","li","li-2",{"children":"These are separate configs — you need to register in both."}],"\n"]}],"\n",["$","h2","h2-3",{"children":"tsup Bundling Gotchas"}],"\n","$L10","\n","$L11","\n","$L12","\n","$L13","\n","$L14","\n","$L15","\n","$L16","\n","$L17","\n","$L18","\n","$L19","\n","$L1a","\n","$L1b","\n","$L1c","\n","$L1d","\n","$L1e","\n","$L1f","\n","$L20","\n","$L21","\n","$L22","\n","$L23","\n","$L24","\n","$L25"]}]]}],"$L26"]}]
+27:I[9809,["577","static/chunks/577-0d4aa266a8de3102.js","741","static/chunks/app/entries/%5Bid%5D/page-b4851e7516f9d030.js"],"SimilarDrawer"]
+10:["$","ul","ul-2",{"children":["\n",["$","li","li-0",{"children":["All source files get bundled into one ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"dist/index.js"}]]}],"\n",["$","li","li-1",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"import.meta.dirname"}]," in the bundle = the ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"dist/"}]," directory, NOT the original source file's directory"]}],"\n",["$","li","li-2",{"children":["Path calculations using ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"import.meta.dirname"}]," must account for this:","\n",["$","ul","ul-0",{"children":["\n",["$","li","li-0",{"children":["From ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"dist/index.js"}],", ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"../migrations"}]," → ",["$","code","code-2",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/cli/migrations/"}]," ✓"]}],"\n",["$","li","li-1",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"../../migrations"}]," from ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"dist/"}]," goes two levels up to ",["$","code","code-2",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/"}]," — wrong"]}],"\n"]}],"\n"]}],"\n",["$","li","li-3",{"children":["Mark all runtime deps as ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"--external"}]," in tsup or they won't resolve at runtime"]}],"\n"]}]
+11:["$","h2","h2-4",{"children":"pnpm Global Linking"}]
+12:["$","pre","pre-1",{"style":{"overflowX":"auto","background":"#f6f8fa","borderRadius":6,"padding":"1rem","fontSize":"0.85em","lineHeight":1.5},"children":["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"inherit","background":"transparent","borderRadius":3,"padding":0},"children":"# Must be run from the package directory\ncd apps/cli && pnpm link --global\ncd apps/mcp && pnpm link --global\n"}]}]
+13:["$","ul","ul-3",{"children":["\n",["$","li","li-0",{"children":["Requires ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"PNPM_HOME"}]," in PATH (run ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"pnpm setup"}]," first)"]}],"\n",["$","li","li-1",{"children":"Creates a shell wrapper script, not a symlink"}],"\n",["$","li","li-2",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"import.meta.dirname"}]," resolves to the actual file path, not the wrapper location"]}],"\n"]}]
+14:["$","h2","h2-5",{"children":"Workspace Package Resolution in Next.js"}]
+15:["$","ul","ul-4",{"children":["\n",["$","li","li-0",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"packages/db"}]," exports TypeScript source directly via ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"\"exports\": { \".\": \"./src/index.ts\" }"}]]}],"\n",["$","li","li-1",{"children":["Next.js webpack cannot resolve ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":".js"}]," imports pointing to ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":".ts"}]," files"]}],"\n",["$","li","li-2",{"children":["Fix: use ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"transpilePackages: [\"@ai-wiki/db\"]"}]," + webpack ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"extensionAlias"}],":"]}],"\n"]}]
+16:["$","pre","pre-2",{"style":{"overflowX":"auto","background":"#f6f8fa","borderRadius":6,"padding":"1rem","fontSize":"0.85em","lineHeight":1.5},"children":["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"inherit","background":"transparent","borderRadius":3,"padding":0},"children":"webpack: (config) => {\n  config.resolve.extensionAlias = { '.js': ['.ts', '.tsx', '.js'] };\n  return config;\n}\n"}]}]
+17:["$","h2","h2-6",{"children":"drizzle-kit Config Gotcha"}]
+18:["$","ul","ul-5",{"children":["\n",["$","li","li-0",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"drizzle.config.ts"}]," is loaded by drizzle-kit's own bundler"]}],"\n",["$","li","li-1",{"children":"Cannot import from workspace TypeScript packages (no compiled output available)"}],"\n",["$","li","li-2",{"children":["Inline any config reading logic directly in ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"drizzle.config.ts"}]," using Node built-ins only"]}],"\n",["$","li","li-3",{"children":[["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"drizzle-kit generate"}]," does NOT need a DB connection — only ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"migrate"}]," does"]}],"\n",["$","li","li-4",{"children":["Use a try/catch around ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"getDatabaseUrl()"}]," so generate works without config"]}],"\n"]}]
+19:["$","h2","h2-7",{"children":"Programmatic Migrations in a CLI"}]
+1a:["$","p","p-2",{"children":["Don't shell out to ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"pnpm db:migrate"}]," from a setup command — it breaks when:"]}]
+1b:["$","ol","ol-0",{"children":["\n",["$","li","li-0",{"children":"The working directory is wrong"}],"\n",["$","li","li-1",{"children":"The package is installed globally (no monorepo context)"}],"\n"]}]
+1c:["$","p","p-3",{"children":"Instead, use drizzle-orm's migrator directly:"}]
+1d:["$","pre","pre-3",{"style":{"overflowX":"auto","background":"#f6f8fa","borderRadius":6,"padding":"1rem","fontSize":"0.85em","lineHeight":1.5},"children":["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"inherit","background":"transparent","borderRadius":3,"padding":0},"children":"import { migrate } from \"drizzle-orm/postgres-js/migrator\";\nawait migrate(db, { migrationsFolder: join(import.meta.dirname, \"../migrations\") });\n"}]}]
+1e:["$","p","p-4",{"children":["Output migration files to ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"apps/cli/migrations/"}]," so they're co-located with the binary."]}]
+1f:["$","h2","h2-8",{"children":"Postgres Connection Pool Hangs Process"}]
+20:["$","p","p-5",{"children":["The ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"postgres"}]," driver keeps a connection pool open. CLI commands never exit without:"]}]
+21:["$","pre","pre-4",{"style":{"overflowX":"auto","background":"#f6f8fa","borderRadius":6,"padding":"1rem","fontSize":"0.85em","lineHeight":1.5},"children":["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"inherit","background":"transparent","borderRadius":3,"padding":0},"children":"program.parseAsync().then(() => process.exit(0));\n"}]}]
+22:["$","p","p-6",{"children":["Exception: long-running commands like ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"serve"}]," should not force-exit."]}]
+23:["$","h2","h2-9",{"children":"Config File Pattern for Global CLIs"}]
+24:["$","p","p-7",{"children":["Store user config at ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"~/.config/<app>/config.json"}],", not ",["$","code","code-1",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":".env"}]," in the project dir."]}]
+25:["$","ul","ul-6",{"children":["\n",["$","li","li-0",{"children":"Works regardless of where the CLI is run from"}],"\n",["$","li","li-1",{"children":"Shared between CLI and MCP server automatically"}],"\n",["$","li","li-2",{"children":["Still support ",["$","code","code-0",{"style":{"fontFamily":"ui-monospace, monospace","fontSize":"0.875em","background":"#f6f8fa","borderRadius":3,"padding":"0.2em 0.4em"},"children":"DATABASE_URL"}]," env var as override (useful for CI)"]}],"\n"]}]
+28:T14f5,# gdbt CLI: Evolution from Bash Wrapper to Python Toolchain
+
+## Problem It Solved
+
+Running `dbt` directly had a fundamental issue: dbt doesn't load `.env` files automatically, and the project required environment variables (Snowflake credentials, row limits, feature flags) to be present before any dbt command executed. Engineers were manually exporting variables or using `source .env && dbt run`, which was error-prone and inconsistent with the VS Code / Cursor dbt Power User extension.
+
+The `CustomDbtRunner` Python class was created first — it wraps dbt's own `dbtRunner`, loading `.env` via `python-dotenv` before any invocation. This also made the Power User extension work correctly by pointing it at the custom runner.
+
+## Phase 1: Bash Wrapper (Dec 2025)
+
+**DATA-4114** (Dec 10, 2025) — the first `gdbt` commit.
+
+A bash script named `gdbt` installed to the user's path via a `make install-gdbt` target. Its only job: `cd` into the correct dbt project directory, then delegate to `dbt_custom_runner.py`. The custom help output when run with no arguments was added in the same week.
+
+```bash
+# What gdbt did at its simplest:
+cd /path/to/dbt_project
+python scripts/shared/dbt_custom_runner.py "$@"
+```
+
+The key insight: by `cd`-ing first, the `CustomDbtRunner` could reliably find `.env` in `Path.cwd()` regardless of where the engineer ran the command from.
+
+## Phase 2: Commands Beyond dbt (Jan–Feb 2026)
+
+`gdbt` grew a subcommand system. Commands that had nothing to do with raw `dbt` execution began shipping:
+
+| Command | Added | Purpose |
+|---------|-------|---------|
+| `gdbt validate` | Jan 2026 | Run all validations + auto-fix + regenerate codegen |
+| `gdbt validate --ci` | Jan 2026 | Fail if any files modified (CI enforcement) |
+| `gdbt validate --force` | Feb 2026 | Full rewrite of all codegen sections |
+| `gdbt lint` / `gdbt lint-fix` | Jan 2026 | Run sqlfluff independently |
+| `gdbt validate-task-groups` | Jan 2026 | Validate YAML configs only |
+| `gdbt dag-pipeline` | Feb 2026 | Interactive pipeline generator |
+| `gdbt regenerate-dags` | Feb 2026 | Rebuild all Airflow Python DAGs from YAML |
+
+**DATA-4428** consolidated pipeline validation into `scripts/shared/` — the same scripts now power `gdbt validate`, the CI action, and can be run standalone.
+
+## Phase 3: Modularization (Feb 2026)
+
+**DATA-4514** (Feb 17, 2026) broke the monolithic bash/Python hybrid into proper Python modules under `scripts/shared/`:
+
+```
+scripts/shared/
+├── dbt_custom_runner.py      # dbt invocation with .env loading
+├── gdbt_config.py            # Project config system
+├── generate_dag.py           # DAG file generation from YAML
+├── generate_pipeline.py      # Pipeline/task group processing
+├── generate_task_group.py    # Task group code generation
+├── project_config.py         # Multi-project configuration
+├── run_custom_validations.py # Validation orchestration
+├── snowflake_utils.py        # Snowflake query helpers
+├── clone_database.py         # DB clone for local dev
+└── cache_utils.py            # Setup cache management
+```
+
+Also in this phase: `gdbt` gained **git-diff-aware validation** — it only regenerates files affected by changed models rather than doing a full rewrite, making validation 3–5x faster on typical PRs.
+
+## Phase 4: Multi-Project & Portability (Mar 2026)
+
+**DATA-4567** (Mar 2026) was the biggest quality-of-life upgrade:
+
+- **Portable installation** — `gdbt` resolves all script paths relative to its own install location, not the current directory. You can run `gdbt validate` from anywhere in the repo.
+- **Multi-project support** — a single `gdbt` install can target both `dbt_analytics` and `dbt_aiml` via config
+- **`gdbt quickstart`** — automated first-time setup: Python environment, `.env` generation, DB clone, dbt dependency install
+- **`gdbt reset`** — tear down local environment back to a clean state (preserves `.python-version`)
+- **`gdbt clone-db`** (DATA-4589) — standalone command to clone Snowflake prod → dev database for local development
+- **`gdbt promote-macros`** (DATA-4591) — syncs shared macros from dbt projects back to the Airflow repo
+
+## What Comes Next: Full Python Package
+
+The current `gdbt` is a bash entrypoint that delegates to Python. The next evolution — already designed but not yet in this codebase — is a **proper Python CLI package** that can be installed via `uv`:
+
+```bash
+uv tool install gdbt
+```
+
+**Tech stack:**
+- **Typer** — argument parsing, subcommands, auto-generated help text
+- **Rich** — colored terminal output, progress bars, tables for validation results
+- **UV** — fast installation, reproducible environments, no virtualenv ceremony
+
+**Why this matters:**
+- No more bash wrapper — pure Python from entrypoint to execution
+- Installable as a tool across any machine without needing the repo checked out
+- Proper `--help` at every subcommand level with Rich formatting
+- Structured output (JSON mode) for CI integration
+- Plugin architecture potential — teams can register their own `gdbt` subcommands
+
+The migration from bash-hybrid to Typer/Rich was already designed and implemented in a parallel codebase iteration. The patterns established here (config system, project abstraction, validation pipeline) map directly onto Typer's command group model.
+29:Tf90,# What's Next: gdbt as a UV-Installable Python Package
+
+## Current State (as of Mar 2026)
+
+`gdbt` is a bash entrypoint that:
+1. Resolves which dbt project to target
+2. `cd`s into that project directory
+3. Delegates to Python scripts in `scripts/shared/`
+
+The Python modules are solid — `generate_dag.py`, `generate_pipeline.py`, `project_config.py` etc. are clean, well-factored code. The remaining technical debt is the bash layer and the fact that `gdbt` lives inside the repo rather than being a standalone installable tool.
+
+---
+
+## The Target Design
+
+### Distribution
+```bash
+uv tool install gdbt
+# or, for development
+uv tool install --editable ./gdbt-package
+```
+
+UV's `tool install` creates an isolated environment for the CLI — no virtualenv management, no `pip install`, no `source activate`. It just works.
+
+### Entry Point
+A single `pyproject.toml`-based package:
+```toml
+[project]
+name = "gdbt"
+dependencies = ["typer", "rich", "dbt-core", "python-dotenv"]
+
+[project.scripts]
+gdbt = "gdbt.cli:app"
+```
+
+### CLI Structure (Typer)
+```python
+# gdbt/cli.py
+import typer
+from gdbt import commands
+
+app = typer.Typer(help="dbt developer CLI for analytics pipelines")
+
+app.add_typer(commands.validate.app, name="validate")
+app.add_typer(commands.dag.app, name="dag")
+app.add_typer(commands.db.app, name="db")
+
+@app.command()
+def run(args: list[str]):
+    """Pass-through to dbt with .env loading."""
+    ...
+```
+
+Each subcommand group gets its own module. Typer handles:
+- Auto-generated `--help` at every level
+- Type validation on arguments  
+- Shell completion generation (`gdbt --install-completion`)
+
+### Rich Output
+Replace `print()` with Rich:
+```python
+from rich.console import Console
+from rich.table import Table
+from rich.progress import track
+
+console = Console()
+
+# Validation results as a table
+table = Table(title="Validation Results")
+table.add_column("Model", style="cyan")
+table.add_column("Status", style="green")
+console.print(table)
+
+# Progress bars for long operations
+for model in track(models, description="Regenerating DAGs..."):
+    regenerate(model)
+```
+
+---
+
+## Key Commands in the New Package
+
+| Command | Description |
+|---------|-------------|
+| `gdbt run [args]` | dbt pass-through with .env loading |
+| `gdbt validate [--ci] [--force]` | Full validation + codegen |
+| `gdbt validate task-groups` | Task group YAML validation only |
+| `gdbt dag generate [--all\|<dag_name>]` | Generate Airflow DAG Python files |
+| `gdbt dag pipeline` | Interactive pipeline builder |
+| `gdbt dag diagram` | Generate pipeline diagrams |
+| `gdbt db clone` | Clone prod Snowflake database to dev |
+| `gdbt promote macros` | Sync shared macros across repos |
+| `gdbt quickstart` | First-time environment setup |
+| `gdbt reset` | Tear down and rebuild local environment |
+| `gdbt lint [--fix]` | SQL linting with sqlfluff |
+
+---
+
+## Cross-Repo Use Case
+
+Once packaged, `gdbt` can be used in any repo that has a dbt project — not just this one. The package discovers dbt projects by looking for `dbt_project.yml` files, and reads `gdbt.config.yml` (or falls back to sensible defaults) for project-specific settings.
+
+This opens the door to:
+- Teams in other repos adopting the same YAML-to-DAG codegen pattern
+- The skills framework being usable without the repo's `.claude/skills/` directory
+- CI workflows consuming `gdbt` as a tool install rather than repo-relative scripts
+
+---
+
+## Migration Path from Current Implementation
+
+1. Extract `scripts/shared/` into `gdbt/` Python package directory
+2. Replace bash entrypoint with Typer app
+3. Replace print statements with Rich console
+4. Write `pyproject.toml` and publish to internal PyPI (or GitHub Packages)
+5. Update repo's `scripts/` to install via `uv tool install` in quickstart
+6. Keep backward-compatible command surface — all existing `gdbt <command>` invocations continue working
+
+The existing Python module structure maps almost 1:1 to Typer command groups, so the migration is largely mechanical.
+2a:T1138,# Skill System Architecture: File-Based Prompts with a Unified Runner
+
+## Skills Are Files
+
+Each skill is a `SKILL.md` file stored in `.claude/skills/<name>/SKILL.md`. The file has YAML frontmatter followed by the full prompt:
+
+```yaml
+---
+name: triage
+description: Analyze a GitHub issue and propose an implementation approach
+allowed-tools: Read, Glob, Grep, Bash(gh:*), Bash(go:list)
+---
+
+You are a senior engineer on the Cronos project...
+[full prompt follows]
+```
+
+The skill file IS the prompt — loaded verbatim at runtime. This makes skills:
+- Human-readable (anyone can review what Claude will do)
+- Version-controlled (skill evolution is tracked in git history)
+- Editable without code changes (no redeployment needed)
+
+## The Unified Runner: `run-skill.sh`
+
+A single script handles local and CI invocation identically:
+
+```bash
+.claude/scripts/run-skill.sh /triage 156
+.claude/scripts/run-skill.sh /implement 156
+.claude/scripts/run-skill.sh /audit 156
+```
+
+### What the Runner Does
+
+1. Parses skill name and issue/PR number from args
+2. Loads the SKILL.md file from `.claude/skills/<name>/`
+3. Determines tool allowlist (READ_TOOLS vs WRITE_TOOLS per skill)
+4. Sets `--max-turns` per skill (ask: 10, triage: 20, audit: 30, implement: 40)
+5. For **read-only skills**: runs claude with `--print` flag, captures stdout, posts it as a GitHub comment via `gh issue comment`
+6. For **write skills**: runs claude normally (Claude has `gh issue comment` access directly)
+
+### The --print Architecture (Critical Bug Fix)
+
+Early versions gave all skills access to `gh issue comment`. This caused a critical bug: triage/audit would accidentally post raw file contents as issue comments (e.g., the full `model_app.go` file appearing as a comment).
+
+Root cause: when Claude had `gh issue comment` access during read operations, it would call it at unexpected times — sometimes with tool output rather than final analysis.
+
+Fix: read-only skills run with `--print` (which outputs final response to stdout and exits). The shell script captures stdout and posts it as the comment. Claude never calls `gh issue comment` directly in read-only mode.
+
+Write skills (`/implement`) still have `gh issue comment` access because they need to post the implementation log mid-run (before the PR exists).
+
+## Tool Allowlists Per Skill
+
+| Skill | Tools |
+|-------|-------|
+| `/ask` | Read, Glob, Grep, Bash(go list), Bash(gh issue/pr view) |
+| `/triage` | Read, Glob, Grep, Bash(go list), Bash(gh:*) [read-only GH] |
+| `/audit` | Read, Glob, Grep, Bash(go list), Bash(gh:*) [read-only GH] |
+| `/implement` | Read, Write, Edit, Glob, Grep, Bash(go:*), Bash(git:*), Bash(gh:*) |
+| `/create-pr` | Read, Write, Edit, Glob, Grep, Bash(go:*), Bash(git:*), Bash(gh:*) |
+
+Explicitly excluded from read-only skills: `git`, file writes, `gh issue comment`, `gh pr create`.
+
+## CI Integration: `claude.yml`
+
+The GitHub Actions workflow listens for `@claude /skill` comments on issues and PRs:
+
+```yaml
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: contains(github.event.comment.body, '@claude')
+    steps:
+      - name: React with 👀
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CLAUDE_BOT_PAT }}  # NOT GITHUB_TOKEN
+      - name: Set up Go 1.23
+      - name: Create static asset stubs  # Required for go:embed
+      - name: Install Claude Code CLI
+      - name: Run skill
+        run: .claude/scripts/run-skill.sh $SKILL_NAME $ISSUE_NUMBER
+      - name: React with 🚀
+```
+
+### Why `CLAUDE_BOT_PAT` and Not `GITHUB_TOKEN`
+
+`GITHUB_TOKEN` doesn't have sufficient permissions to push branches and create PRs. A Personal Access Token (`CLAUDE_BOT_PAT`) is required. This is a known friction point for new repo setups — document it early.
+
+## Sandboxed GitHub CLI: `gh.sh`
+
+A wrapper around `gh` that restricts operations to safe, read-only commands. Skills that only need to read issues/PRs use `gh.sh` instead of raw `gh`, preventing accidental destructive operations (closing issues, deleting branches, etc.).
+
+## Local/CI Parity
+
+The design goal: the same command, same output, whether run in a terminal or triggered by a GitHub comment. The `run-skill.sh` script achieves this — it works locally (using `claude login` credentials) or in CI (using `ANTHROPIC_API_KEY` env var). No separate local vs CI prompts or logic.
+2b:T81f,# Auto-Registering GraphQL Resolvers via File Naming Conventions
+
+Instead of manually importing and registering every resolver, use a codegen script that scans the filesystem by naming convention and generates a single NestJS resolver module.
+
+## Convention
+
+- `m_*.ts` — mutation resolver
+- `q_*.ts` — query resolver
+- `report.*.ts` — paginated report query
+- Files live in `src/resolvers/crudModels/{entity}/`
+
+## Each resolver file exports a fixed interface
+
+```typescript
+@ArgsType()
+export class QueryArgs {
+  @Field(() => String)
+  someField: string;
+}
+
+export const OutputType = SomeObjectType;
+
+export const fn = async ({
+  context,
+  args,
+}: {
+  context: IContext;
+  args: QueryArgs;
+}): Promise<typeof OutputType> => {
+  await canAccess(context, [perms.resource.action]);
+  // ...
+};
+```
+
+## generateResolvers script
+
+Uses `glob` to find all `[mq]_*.ts` files, extracts resolver name from filename (strips `m_`/`q_` prefix), infers GQL type from prefix, then renders a Handlebars template:
+
+```typescript
+const getCrudModelResolvers = async (rootDir: string) => {
+  const tsFiles = await glob(`${rootDir}/**/[mq]_*.ts`);
+  return tsFiles.map((filePath) => {
+    const file = path.parse(filePath);
+    const gqlType = file.name[0] === 'q' ? 'Query' : 'Mutation';
+    return {
+      filePath: getFullPathWithoutExtension(filePath),
+      resolverName: file.name.slice(2),
+      gqlType,
+    };
+  });
+};
+```
+
+## Generated module (Handlebars template)
+
+```handlebars
+@Resolver()
+class CrudModelsResolver {
+  constructor(readonly dbService: DbService) {}
+
+{{#each resolvers}}
+  @{{gqlType}}(() => {{resolverName}}.OutputType)
+  async {{resolverName}}(
+    @Args() args: {{resolverName}}.QueryArgs,
+    @Context() context: IContext,
+  ) {
+    return await {{resolverName}}.fn({ context, args });
+  }
+{{/each}}
+}
+```
+
+## Benefits
+
+- Adding a new resolver = create one file, run `pnpm generateResolvers`
+- No manual imports or module wiring
+- Enforces consistent resolver interface across the codebase
+- Easy to see all mutations/queries at a glance from the filesystem
+2c:Ta31,# How ai-wiki Works
+
+## What It Is
+A personal knowledge base designed for AI sessions. Store thoughts, ideas, and articles once — retrieve them in any Claude session on any machine.
+
+## Architecture
+```
+apps/cli     → wiki CLI (add, search, get, list, delete, setup, serve)
+apps/mcp     → local MCP stdio server (Claude uses this automatically)
+apps/web     → Next.js read-only dashboard (wiki serve)
+packages/db  → Drizzle schema + queries shared by all apps
+```
+All apps share the same Postgres database.
+
+## Storage
+- **Database**: PostgreSQL (Neon, Supabase, Railway, or local)
+- **Schema**: `ai_wiki` (isolated from public schema)
+- **Table**: `ai_wiki.entries` with fields: id, title, content, summary, tags, type, createdAt, updatedAt
+- **Config**: `~/.config/ai-wiki/config.json` stores the DATABASE_URL
+
+## Entry Types
+- `note` — general notes
+- `idea` — ideas to explore
+- `article` — long-form content
+- `thought` — quick thoughts
+
+## Token Efficiency
+Each entry has an optional `summary` field. MCP tools like `wiki_list` and `wiki_search` return summaries instead of full content — keeping token usage low. Use `wiki_get <id>` to retrieve full content when needed.
+
+## CLI Commands
+```bash
+wiki setup             # first-time setup: DB config, migrations, MCP registration
+wiki add               # interactive prompt to add a new entry
+wiki list              # list recent entries (id + title + summary)
+wiki search <query>    # keyword search across title, content, summary, tags
+wiki get <id>          # retrieve full entry by UUID
+wiki delete <id>       # delete an entry (with confirmation)
+wiki serve             # start Next.js web dashboard on localhost:3000
+```
+
+## MCP Tools (available to Claude automatically)
+- `wiki_add` — add an entry
+- `wiki_list` — list recent entries (summaries only)
+- `wiki_search` — search by keyword
+- `wiki_get` — get full entry by ID
+- `wiki_delete` — delete an entry
+
+## Setup on a New Machine
+```bash
+git clone <repo>
+pnpm install
+pnpm db:generate        # no DB needed
+pnpm build
+cd apps/cli && pnpm link --global
+cd ../mcp && pnpm link --global
+source ~/.zshrc
+wiki setup              # enter DB URL, runs migrations, registers MCP
+claude mcp add ai-wiki /absolute/path/to/wiki-mcp --scope user
+```
+Restart Claude Desktop if using it. Claude Code picks up the MCP immediately.
+
+## Database Migrations
+Always use Drizzle Kit — never manually modify the database.
+```bash
+# After editing packages/db/src/schema.ts:
+pnpm db:generate   # generate migration file
+pnpm db:migrate    # apply to DB (or run wiki setup again)
+```
+26:["$","$L27",null,{"similar":[{"id":"1d26e06d-ded9-4f67-b765-3fea40992dcd","title":"gdbt CLI: Evolution from Bash Wrapper to Python Toolchain","content":"$28","summary":"How the gdbt developer CLI was born, how it grew from a simple bash wrapper into a modular Python system, and where it's headed as a proper UV-installable Python package using Typer and Rich.","tags":["dbt","gdbt","cli","tooling","developer-experience","python","typer","rich","uv"],"type":"article","embedding":[-0.0901826,-0.007685135,-0.004756334,0.023221137,-0.00728722,-0.12027863,-0.010839221,0.09701206,-0.081121325,-0.016604006,-0.03155457,-0.012825704,0.06826893,-0.00142867,0.021216659,0.0010762137,-0.03478104,-0.06283805,-0.04701051,-0.0010575928,-0.011132774,0.071548566,0.05730724,0.03296632,-0.0012244493,-0.11825993,-0.013211758,-0.039658874,-0.058372162,-0.009025816,0.0013199527,0.116775945,-0.091080174,0.03590664,0.07933637,0.1320435,0.054744747,0.020798787,-0.040014736,-0.012548907,0.045377765,0.028018521,-0.04405678,-0.0043835477,-0.053325478,-0.030743895,-0.026598483,-0.038820278,-0.096620806,-0.028311223,0.008660674,-0.019825349,-0.009892807,-0.05243468,0.08148056,0.067730896,0.06876563,0.065710336,0.058078993,-0.0079671135,-0.07053607,0.03402184,-0.06097614,-0.024332106,-0.014446947,-0.038143724,0.029099679,0.011697458,0.022900302,-0.027275193,-0.027816724,-0.010909371,-0.117216416,-0.04977638,-0.043209642,0.042540073,0.028400311,0.04792361,-0.08652548,-0.059021976,-0.09078975,0.0067657465,0.01991914,0.036708545,0.041196834,0.0016310568,0.021597235,0.017234761,0.11089932,0.054379966,0.053655773,-0.07990282,-0.036196735,0.014331015,0.0013393642,-0.00086915115,0.071422935,0.006124737,0.015677154,0.034275968,-0.032764476,-0.022643706,0.055339664,0.026467653,0.06733522,0.040750116,-0.021175155,-0.06826921,-0.03898877,-0.0543439,0.0089363465,-0.031865854,0.005078193,-0.08221522,0.02818575,0.059044518,-0.016180785,0.015773613,-0.019625219,0.04655906,0.046304803,0.015865048,0.07185663,0.03350552,0.0019882915,0.046580497,-0.003627944,4.1262015e-33,0.038628805,-0.15048945,0.02745123,0.0060858866,0.04447321,0.09317508,-0.0234109,0.05889038,-0.027782073,0.0076450687,-0.025868889,0.059344877,-0.053463288,0.018621393,0.06751977,0.019536674,-0.07141977,0.009038487,-0.07878195,0.05649001,0.111091614,0.057196315,-0.05071361,0.014990531,-0.0024749157,-0.035787873,0.023143414,-0.01791001,0.031463828,0.021193545,-0.07737385,-0.0875371,0.046323173,0.051607244,-0.04064892,-0.03833112,-0.00077048584,-0.07234556,-0.015545045,0.012650636,0.03027284,0.071631275,0.0035355655,-0.09558887,0.01739567,-0.02612706,0.025812926,0.016255068,-0.0034813501,0.022410179,0.00755992,0.013760315,0.02559491,-0.031522408,0.019313172,0.039036185,0.0371718,-0.014942109,0.10039122,-0.0012748976,0.0051310635,0.08559528,0.04215473,0.0050916784,0.057026725,0.009228848,-0.0072900886,0.043046247,0.07341428,0.037130617,-0.06682858,0.012726114,0.016836587,-0.03245516,0.14510778,-0.032863565,0.003359937,-0.041061178,-0.04079068,-0.050478313,0.027431848,0.008050491,-0.047691613,-0.027063094,-0.016089976,-0.040635113,-0.023858393,0.018166814,-0.1134409,-0.04499219,0.036688432,-0.06706712,-0.005822628,-0.038618505,-0.06320708,-6.4484145e-33,0.06062474,0.000821191,0.02987624,0.008692538,0.04100839,-0.06873491,-0.076916985,-0.12420279,-0.04463211,-0.10893996,-0.10007516,0.0110340975,0.036066882,0.03936102,0.02602138,0.06531437,-0.07857787,-0.01798999,-0.035982054,0.0431403,0.044415057,0.08058923,0.037699286,0.015594934,0.027181258,-0.053385615,0.006202382,0.042232513,0.055766672,0.04103047,-0.050479904,0.082066305,-0.14488454,-0.011808342,-0.0506737,-0.030858781,-0.03329402,0.075879015,0.028442606,-0.025951246,0.09912551,0.029870102,0.022782903,0.0091609005,-0.04014914,0.040418617,-0.03993416,-0.03591929,0.010939413,-0.06400308,0.000660961,-0.024927,0.063304305,0.036103357,-0.038283966,-0.064701945,0.08265282,-0.0065855565,-0.09277922,-0.032078773,0.009528542,-0.034719106,0.053318936,-0.06749751,-0.09619544,0.015675364,-0.06816304,-0.012730866,-0.018519478,-0.051888186,-0.05525978,-0.057728805,0.02083322,-0.0060771774,-0.025297575,0.113380514,-0.06981271,-0.124611184,-0.006659436,0.044218972,-0.082086265,0.025923077,-0.008493991,-0.072300956,-0.03499268,-0.077305034,-0.06260469,0.09640127,0.048168167,0.017920857,0.0012462082,0.010967776,-0.029992739,0.06846985,0.000789852,-5.2547723e-8,0.04959343,0.007971509,-0.04699998,0.051495492,0.06969083,-0.03915313,0.0032327597,0.05792381,-0.0061207237,0.026498491,0.019845057,0.059476487,-0.005288577,0.0587588,0.0027413417,0.04845378,0.008864219,-0.054505695,-0.06853068,-0.03322579,-0.0057473746,0.029501252,-0.040495705,0.007426591,-0.088317595,0.052028738,-0.00988663,0.030299658,-0.02795976,-0.02201992,0.1107524,0.012075335,-0.044843253,0.0052915704,-0.01720873,0.0019317719,0.042742446,0.03349183,0.08118257,0.057370014,-0.034874547,-0.018947799,0.013665486,0.02287993,-0.044952843,-0.04242488,-0.054310806,0.050052464,-0.023965312,0.014600698,0.012151602,0.033976357,-0.07824339,0.0283405,0.085475035,0.05851987,-0.034053832,-0.059196655,-0.028356941,0.0029540167,-0.0919841,-0.06644937,0.10807409,0.034545243],"createdAt":"$D2026-03-21T18:22:25.431Z","updatedAt":"$D2026-03-21T18:22:25.431Z","deletedAt":null},{"id":"42cdc8a1-f93d-4f38-b06c-6ca27df57c55","title":"What's Next: gdbt as a UV-Installable Python Package","content":"$29","summary":"Design notes for the next evolution of gdbt: a proper Python CLI package installable via UV, built on Typer and Rich, decoupled from the repo it manages.","tags":["dbt","gdbt","cli","python","typer","rich","uv","future","tooling"],"type":"idea","embedding":[-0.10142235,-0.028485553,-0.019369315,-0.015056777,-0.047496207,-0.11008182,0.024462918,0.09789993,-0.090371855,-0.007915342,-0.028286261,-0.033601314,0.0807712,0.0016318341,0.01577469,0.025587345,-0.031132847,-0.044214893,0.014403817,-0.046658892,0.013677853,0.14508353,0.05738376,0.027079666,-0.0031297049,-0.09335954,-0.010614025,-0.03012964,-0.07217111,-0.00064614264,0.024458783,0.08193257,-0.08865047,0.0035287049,0.09420829,0.1429738,0.039087027,-0.06177024,-0.05144477,0.012005109,0.057413656,0.037930585,-0.037134137,-0.047809243,-0.06021935,-0.07115481,-0.052942526,-0.02532969,-0.03997645,-0.05889292,-0.018231373,-0.022328384,-0.054066774,-0.07001362,0.036641903,0.052789535,0.025442919,0.057094816,0.00026321385,-0.036966518,0.0016760578,0.04774756,-0.01751143,-0.0042541064,-0.021457197,0.00005493009,0.018542945,0.00987005,0.06035637,-0.028288761,-0.09557274,0.02084996,-0.12331285,-0.03267014,-0.06378062,0.002883861,0.06495768,0.047241736,-0.026214987,-0.03015597,-0.11099609,-0.019874642,0.012547099,0.081369914,-0.014013564,-0.047440037,0.0069808783,0.099704884,0.108812585,0.034404382,-0.024221085,-0.071407795,-0.021095736,-0.013545687,-0.021385396,0.08096188,0.037089523,-0.0051067625,-0.007224581,0.04694172,-0.056669973,-0.07468476,0.05709919,0.012841016,0.08131405,0.049435757,0.019327248,-0.07455408,-0.041996196,-0.059723806,-0.04414683,0.0323088,-0.024257446,-0.07099362,0.004153444,0.10179126,0.031479597,-0.017414575,-0.038612653,0.045486473,0.06858097,0.021413138,0.07679073,0.0052958443,0.032099124,0.0011541236,-0.014781215,5.5961686e-33,0.043561477,-0.10840517,0.066116214,0.008809264,0.051705774,0.11443949,0.030198049,0.02927398,-0.0869083,-0.019932292,-0.077749856,0.06224008,-0.10525854,0.053913992,0.045346003,-0.006372958,-0.06660378,0.061573815,-0.013237638,0.0014649193,0.08101534,0.05455021,-0.03220296,-0.0023750975,-0.020211723,-0.027172394,0.033577703,-0.01658396,-0.055128075,-0.001868125,-0.07210548,-0.08530341,-0.0012652474,0.024675997,-0.060081128,-0.05531075,-0.090986475,-0.030431982,0.038049933,0.024924433,0.008309035,0.058287617,-0.0049746237,-0.014797192,0.053806383,0.021315062,-0.004206829,0.011972453,-0.005050866,0.016954815,0.01505232,-0.020818062,0.010009928,0.02297394,-0.03084851,0.016717436,0.042208232,0.03400021,0.10599845,-0.06203653,-0.01986161,0.05144591,0.01065554,0.03955856,0.07753369,0.06449076,-0.0037437095,0.07138865,0.05837803,0.05097991,-0.017068028,0.02849128,0.04228688,-0.039002508,0.093667634,-0.053159114,0.021861706,-0.07154034,-0.074737355,0.037949037,0.033525914,0.015880456,-0.051086217,-0.03125856,0.010097639,-0.01627097,0.030125061,0.0118733365,-0.069780506,-0.053456336,0.0026809787,-0.06704435,0.012214762,-0.10945171,-0.008550145,-7.556514e-33,0.09947379,-0.01554211,0.07351949,0.019428404,0.04407464,-0.11899302,-0.06964404,-0.051819224,-0.017283535,-0.10290845,-0.08884324,0.020209853,0.053285625,0.024924884,0.0022783147,0.056235693,-0.074722886,-0.03361454,-0.008692873,0.046734244,-0.034056522,0.05401388,0.023936456,0.0032017652,-0.037420034,-0.06402748,-0.023298264,-0.0036168424,-0.006651384,0.02635809,-0.09067731,0.15764196,-0.12076379,0.007953851,-0.0021153758,-0.03504656,0.019881185,0.055836182,-0.007360267,-0.01151766,0.10108925,0.0060104458,-0.016528832,-0.026831862,0.019031731,0.044171833,0.0039635827,0.011120355,-0.06358026,-0.01766474,-0.04346364,0.003036244,0.01939836,0.05735269,-0.039491076,-0.02948154,0.06179145,0.03434002,-0.07834231,-0.017478302,-0.015733477,-0.031978473,0.034390908,-0.0706742,-0.036098853,0.01606853,-0.10374531,-0.029272728,-0.040937115,-0.030096726,-0.041665744,-0.09086141,0.042409252,-0.04479123,0.020435603,0.087862186,-0.07208346,-0.031031623,0.020165114,0.09378443,-0.055016685,0.053461865,0.013567686,-0.025577296,-0.017617831,-0.071918875,-0.057874653,0.050020475,0.008805793,-0.0141982995,-0.046445627,0.004175654,0.031095846,0.0227437,0.033591438,-5.2446396e-8,0.041135382,0.014794947,-0.06381886,0.028902994,0.036691718,0.0010730617,-0.058006946,0.07461841,0.040811975,0.024478285,0.0110073965,0.024863493,-0.017550861,0.0796963,-0.048288852,0.09454729,-0.026416123,-0.04950034,-0.0504742,-0.01757049,0.002382508,0.007640176,0.001064622,0.0642049,-0.07340159,0.0009849976,0.018945692,0.011751757,-0.008598805,0.021509899,0.10661973,-0.002003921,-0.04869884,0.03370448,0.040925954,-0.029487353,0.056470845,0.030929523,0.08506345,0.00788917,-0.06786012,0.007626881,-0.014624323,-0.010193226,0.019146912,-0.02668361,-0.016595613,0.043217663,0.029418064,0.023518939,-0.011078063,0.010694573,-0.063766114,-0.025974296,0.057754662,0.054303728,0.013658914,-0.034081962,-0.012217111,-0.006227222,-0.041601293,-0.08605794,0.11880557,-0.016457938],"createdAt":"$D2026-03-21T18:25:15.888Z","updatedAt":"$D2026-03-21T18:25:15.888Z","deletedAt":null},{"id":"bbd942d7-b145-4b75-b503-c536e4c70a94","title":"Skill System Architecture: File-Based Prompts with a Unified Runner","content":"$2a","summary":"Skills are SKILL.md files with YAML frontmatter (name, description, allowed-tools) loaded verbatim at runtime. A single run-skill.sh script handles local and CI invocation identically. Read-only skills capture --print output and post it as a comment; write skills invoke gh directly.","tags":["workflow","ai","architecture","skills","cronos","claude-code"],"type":"article","embedding":[-0.036100984,0.022383226,-0.09269291,-0.027819518,-0.01094042,-0.06600552,0.017357403,0.056936108,-0.061893754,0.07181049,0.00977057,0.019024946,0.05369563,-0.02768167,-0.024372587,-0.00003602179,-0.058987606,-0.013111088,-0.06188841,-0.091833934,0.015586007,0.03192481,0.02027623,0.007983735,-0.0056443745,-0.00620389,-0.0408766,-0.024966318,-0.11023003,-0.04289612,-0.0022018468,0.059255186,-0.009400001,0.05286046,0.051608387,0.14233282,0.04285082,-0.014789822,-0.07744922,0.002321395,-0.055996772,0.05073807,-0.037590135,-0.028334958,-0.043737166,-0.019517783,-0.061660185,0.00704604,-0.060457185,-0.008534521,-0.065572165,-0.10762996,0.026275419,-0.024088144,0.059485096,0.0023804992,0.011304671,-0.0104691265,-0.021045629,-0.06806333,-0.09735273,0.07391536,-0.094816335,-0.025902122,-0.009312516,-0.015904717,-0.049132198,0.043144118,-0.011574978,0.011490423,-0.052092616,0.0054927533,-0.09885463,-0.0032014446,-0.037791055,0.037425246,-0.032651354,0.05537659,-0.07224293,-0.19168513,-0.047872756,0.0057077776,0.03177337,-0.011868574,0.003752956,0.026515862,0.029890385,0.07906465,0.1499129,0.0030144437,0.039716564,-0.0078108776,0.008117803,-0.013193788,0.060887907,0.067342736,0.046186756,0.07215502,-0.014485049,0.0653943,-0.004363858,-0.04049615,0.07071377,-0.0033012403,0.042866174,0.09957023,0.017466588,0.0037352517,-0.011802587,-0.07445004,-0.009202311,0.03585541,-0.02471656,-0.006567256,0.084955975,0.05214766,0.056078292,0.028407972,-0.030149171,0.09203107,0.06969051,0.008836304,0.009612985,0.06445347,0.03644977,-0.07059736,0.0042215125,3.803773e-33,0.06394407,-0.058568325,-0.03355885,0.0074408767,0.007436011,0.012835748,0.061641842,0.042878356,-0.09002612,0.009462026,-0.026801426,0.024245773,-0.029712284,0.03465588,0.049627688,0.031170046,0.028953386,0.0075232033,-0.032102462,0.026652906,0.10605936,0.0117439395,-0.103686936,0.032141596,0.009884984,-0.017352184,0.040788516,-0.0633256,-0.0014221622,0.009113863,-0.013846596,-0.068343945,0.01665981,0.020454515,-0.03481745,-0.032800093,-0.017232735,-0.028423412,0.022140192,-0.03362736,0.03795765,-0.041656334,0.020413611,-0.008045221,0.01268019,-0.0318555,-0.06397657,0.069358684,-0.008788345,0.059883047,0.062340364,0.03413854,0.016033884,-0.056982484,0.016574582,0.04569855,0.0025726906,-0.0028887917,0.002452793,0.077287,0.03035161,0.065494515,-0.06594461,0.05128732,0.038009338,-0.045018844,-0.011602737,0.047844455,0.12362041,0.07798873,-0.13933197,-0.048170995,0.067315616,0.012214372,0.046327356,-0.0831435,0.04019687,-0.042038206,-0.043269865,-0.031775877,-0.03326798,0.0015530417,-0.112336725,-0.047703158,-0.0058858213,-0.048243616,0.036561668,-0.06551685,-0.06453871,-0.027033694,0.06645756,-0.059489593,-0.045113176,-0.03817679,-0.07445523,-4.6014168e-33,0.031525776,-0.044640645,-0.014887859,0.058403526,0.01832786,-0.037470315,0.034246925,-0.11126191,-0.0126287835,-0.08853564,-0.12582126,-0.014593856,0.004124972,-0.0037754842,0.11057451,-0.0005751116,-0.10203949,-0.035609152,0.033798933,0.056052577,-0.029924719,0.08237138,0.07858074,0.053230423,0.05013088,-0.02219653,-0.007438337,0.06673816,0.0023001982,0.03520461,-0.02661616,0.006669256,-0.12272838,-0.005233816,-0.01472228,-0.065497465,-0.045179695,0.036740243,-0.043805715,0.065544344,0.09530358,0.018267876,-0.025711657,-0.0033999186,-0.035458256,0.023236822,-0.0022170565,0.012070123,-0.08577322,-0.038157832,0.051629476,-0.060706556,0.016742991,0.035986826,-0.03535982,-0.04919307,0.07528206,-0.04048249,-0.09546144,0.009696669,0.031327263,0.019186445,0.006522272,0.0081243245,0.04633483,-0.06479935,-0.042488582,-0.028222574,0.0022984277,0.06201885,-0.004434532,-0.03331233,0.00785354,-0.067367814,0.028448798,0.060371693,-0.071488336,-0.07562606,-0.043879528,0.08673704,-0.069382265,0.061235867,0.007798572,0.06303011,-0.022760717,0.033828072,-0.05219883,0.0932439,0.08019977,-0.0029412492,0.040384267,0.00914281,0.067188434,-0.0055162394,-0.01757806,-4.8837673e-8,0.016508922,-0.018300975,-0.04466017,0.05091684,0.03322385,0.03190628,-0.060488723,0.00948054,-0.03740598,0.016124696,0.08056999,-0.00567949,-0.007621647,-0.04374482,-0.023957632,0.0060075666,0.07139346,0.011524176,-0.089225635,-0.02576002,0.06665441,0.054770034,-0.094817184,0.042075533,-0.035946496,-0.0392175,-0.0010444329,0.02530527,-0.10884436,0.046926524,0.09656176,-0.052954942,0.010077509,-0.011525648,0.07328626,-0.030149803,0.068070605,0.020402253,0.01770637,-0.011611418,0.02210125,0.025529796,-0.011007828,0.00088243856,0.011585656,-0.10427564,-0.022419987,-0.04660542,0.051764738,-0.0062389965,-0.01621292,0.021051308,-0.051193617,0.05764468,0.044678826,0.032317653,0.049795374,-0.051004406,0.0061156545,-0.003180273,0.02753098,-0.00037838807,0.115143746,0.050051436],"createdAt":"$D2026-03-21T17:20:00.610Z","updatedAt":"$D2026-03-21T17:26:31.731Z","deletedAt":null},{"id":"1dffa45a-93b3-4d7b-b5be-d2bc9c691003","title":"Auto-Registering GraphQL Resolvers via File Naming Conventions","content":"$2b","summary":"Pattern for auto-discovering and registering NestJS/GraphQL resolvers based on file naming conventions (m_*.ts for mutations, q_*.ts for queries), using glob scanning + Handlebars templates to generate a single resolver module.","tags":["graphql","nestjs","codegen","architecture","patterns","client:bgc"],"type":"idea","embedding":[-0.13003145,0.046320446,-0.017139954,0.035477556,-0.08551727,-0.03266355,0.0072519504,0.11498325,-0.014955891,0.06639035,-0.021454612,0.015775207,0.026337171,0.028753813,0.01772954,0.027494213,-0.10411301,-0.004138409,0.029633624,-0.03690155,0.052061662,0.10003737,0.046473503,-0.08292002,0.00082080055,-0.018565556,-0.029395808,-0.044600904,0.012114312,-0.021941207,0.031799104,0.11133182,-0.08083943,0.07199465,0.030003875,0.093831174,0.02265332,-0.06438114,-0.008854961,-0.0708271,0.08877794,0.13164799,-0.031043427,-0.092527725,0.043183606,-0.09203649,-0.04979754,0.02223258,-0.057478994,-0.022884894,-0.114350274,-0.08100589,-0.10059224,-0.009785856,0.0728781,-0.0022579925,-0.03490539,-0.019574922,0.062325113,0.05281263,-0.025276942,-0.031173669,0.018510561,-0.10773722,0.043683436,0.052147806,0.03587615,0.05589256,0.11264352,-0.001613609,-0.064877816,0.039241895,-0.028265053,0.023894401,-0.031717848,-0.013170964,-0.075906545,0.08998333,-0.04135804,-0.09805991,-0.006453929,-0.018524317,0.053212747,-0.0059843813,0.012608635,-0.008739641,0.009098666,-0.044183407,0.083198935,-0.05580789,-0.06471685,-0.11276457,-0.058494944,-0.0024121674,-0.008014452,0.08002133,0.060996924,0.07228712,0.063810356,0.009701251,0.015263142,-0.03643002,0.034920823,0.030597566,0.005675895,0.056547496,0.037545726,-0.02815434,-0.075207345,-0.03922695,-0.055612855,0.09305252,0.026481085,-0.052562993,-0.017217422,-0.04925314,0.016665727,-0.03567746,0.0155684445,0.103676595,0.07474545,0.017962461,0.008149623,0.022765815,0.06292819,0.0036688545,-0.020901186,8.7791245e-33,0.032354422,0.0008315627,0.028322512,0.07178483,0.04406781,0.002502901,0.022915099,0.020152796,-0.08976965,0.0757286,-0.06156595,0.021072509,-0.072521225,-0.050959814,-0.005573622,-0.010497601,-0.028795479,-0.032742985,0.034607094,0.04741353,0.047429893,0.044265542,-0.050820705,0.073280476,0.026049782,0.053738236,0.019562269,-0.024796998,-0.014956516,-0.032200493,0.104583964,-0.04919946,0.0067162705,0.06732643,-0.047867596,0.008869078,-0.004836629,0.005133347,-0.10891503,-0.030877803,0.027236732,-0.0019602599,-0.09307171,0.041103087,-0.034441303,-0.041809935,-0.024908673,-0.06875466,0.03656879,-0.08138469,-0.012716176,0.053952597,-0.00057587726,-0.031267412,0.08271089,0.0057420335,-0.009665333,0.023678081,0.041233372,0.020417623,-0.0020374584,-0.06072662,-0.053236622,0.0032810706,0.04795265,-0.047370095,0.0125239445,0.010874234,0.033361837,0.07386891,0.024201872,-0.0054696016,0.030586952,-0.005079991,0.106216654,-0.04258264,-0.06659391,0.026742822,-0.10137834,-0.052146923,-0.0132718915,-0.03919574,-0.06904771,0.092168584,-0.0044368412,-0.05311589,0.05592441,-0.05146827,0.006175794,-0.06323427,0.018581482,-0.021954693,0.010136224,-0.06619061,-0.019208636,-7.5764336e-33,0.09901106,0.010921178,0.039956506,0.014742588,-0.043353885,-0.073564254,0.03426763,-0.007748566,-0.053030036,-0.010906862,-0.054462958,-0.013372473,0.044534665,-0.079643704,0.0338104,0.050103627,-0.030736845,-0.12535323,-0.01879666,0.0016808078,-0.041870438,0.06259298,0.05379037,0.031164218,0.03146025,0.074030586,0.019581722,0.10088681,-0.025974758,-0.006874109,-0.04070893,-0.006363095,-0.044277433,-0.059904043,-0.022183696,-0.07584194,0.012306612,0.052987453,-0.017689895,0.019957123,0.010565524,0.013240145,-0.094695024,0.04059192,0.015185773,-0.024872731,0.06360613,0.06251648,0.006116514,-0.08036206,0.030102413,-0.039949145,-0.041533835,-0.07419308,0.028101655,-0.04086814,0.05578323,-0.08860442,-0.044759445,0.026548736,0.033514164,-0.06598703,0.013771257,-0.068993494,0.0012609133,-0.028146671,-0.06801271,-0.08481957,0.07973986,0.024539651,-0.04270795,-0.034531597,0.020341331,-0.014486581,0.13518333,0.033067763,-0.013036672,-0.008135458,0.053786214,0.012281837,-0.059147805,-0.011724699,0.005787064,0.050988656,0.0038956755,-0.030295495,-0.017403375,0.09995806,0.032605708,0.030957466,0.009937151,-0.0007718756,-0.013535035,-0.0057443213,0.026296467,-5.0498546e-8,-0.09668631,-0.015467686,-0.10800834,-0.00058683,0.05705011,0.03202685,-0.038234,0.06493202,0.021659397,0.032553952,0.008065597,0.0017284964,-0.020663604,0.048598737,0.0058169435,-0.038730808,0.07977812,0.029239917,-0.09399289,0.0135626765,-0.042693637,0.06134585,0.020417495,0.051783856,0.043796737,-0.027423985,0.06796461,-0.029742021,0.0065015364,0.034115836,-0.0869239,-0.007694029,0.012683728,0.027084632,-0.046739317,-0.051929507,0.09577529,-0.005030369,0.012586968,0.0095764715,0.059658565,0.0522174,-0.03402261,0.029043514,-0.06319794,-0.0676164,0.022387829,0.060171112,0.07679708,0.028521901,-0.0048209587,-0.049449235,-0.058115557,0.011014646,-0.06466446,0.010236129,0.030540206,-0.023142183,0.0199778,-0.010725484,-0.013755535,-0.070768096,0.04284545,-0.04322455],"createdAt":"$D2026-03-21T16:05:10.422Z","updatedAt":"$D2026-03-21T17:26:34.123Z","deletedAt":null},{"id":"a4aa5f47-eeb6-4f31-8bbd-25970b28cac1","title":"How ai-wiki Works","content":"$2c","summary":"Architecture, setup, and usage of the ai-wiki personal knowledge base — a CLI + local MCP server backed by Postgres for storing and retrieving knowledge across AI sessions.","tags":["ai-wiki","mcp","cli","knowledge-base","setup"],"type":"article","embedding":[-0.050390307,0.014964327,-0.033663463,0.03960693,0.040672652,-0.04915247,0.051983565,0.06450143,0.04240351,0.052331783,0.022507165,0.021885999,0.03613386,-0.036749613,-0.005666033,0.07750158,-0.031005062,-0.011235889,-0.05710808,-0.09372003,0.0058382154,0.016830264,0.0018387844,0.036482707,-0.030158399,-0.0028352705,-0.057292245,0.013026925,-0.07018286,-0.027624074,-0.032724448,0.039636362,0.00014801722,0.05462897,0.012098772,0.10762138,0.009825535,-0.059620935,0.052928276,-0.0862081,-0.0054982114,0.017743075,-0.06607842,0.035741135,0.00088223774,-0.010041319,-0.13685228,-0.09009463,0.0039785635,0.015768606,-0.13352126,-0.018429767,-0.02015826,-0.0038737515,0.010234684,0.074994,-0.15401016,0.011893094,0.03250438,-0.04456875,0.053552266,-0.024268702,0.014528404,0.0051225675,0.009476731,-0.050206978,-0.05585639,0.0280009,0.11589335,-0.028916387,0.031511042,0.07696916,-0.10235426,0.006914007,-0.017998548,0.0022782823,-0.0021338102,-0.028211182,-0.109720305,-0.07571045,-0.04082592,0.020401906,0.055961,0.00037086543,-0.044458933,-0.03236127,0.017144386,-0.023801858,0.07860495,-0.012444988,0.03620604,-0.115373984,-0.006307114,-0.025775643,0.027625376,0.06602406,0.042608675,0.009641745,-0.038915236,0.10223573,0.014748029,0.10174793,0.08589866,-0.0114123495,-0.04379415,0.004528065,0.03852002,-0.016167074,-0.037066564,-0.01625754,-0.004696995,0.02139071,-0.018018994,-0.045107927,0.010172728,0.0703145,0.047625255,0.03145693,0.07967074,0.12030494,0.089544326,0.034975935,-0.05318101,0.0467489,-0.01668774,-0.0015981378,0.008284212,7.543737e-33,0.056772962,-0.023142317,-0.020429103,0.029295532,0.0019937225,-0.044621594,0.042061325,0.010189273,-0.13393833,0.03601736,-0.045725465,0.0994297,-0.07362455,-0.014431071,0.04232264,-0.025951039,-0.021708721,0.0369007,0.07148426,0.049728066,0.088269554,-0.012875938,-0.04480234,-0.017964015,0.090649374,0.02136728,-0.011565461,-0.013814098,-0.015574809,0.01647068,-0.012382892,0.029565934,-0.07669007,0.028345129,0.032828446,-0.0027449697,-0.0613579,-0.019796243,-0.04726303,-0.05278805,-0.007835504,0.023078663,-0.09218662,-0.040120184,-0.0437119,-0.0048656,-0.062032692,-0.007859129,0.03279319,-0.01112954,-0.07657593,0.03590926,-0.050866667,0.010161701,0.0024890918,-0.06922376,0.0088686785,0.00893291,0.041325964,0.027455134,0.028147914,0.0037135296,-0.055405144,0.054290038,0.060400054,0.010803197,-0.057618972,0.08336717,0.08530367,0.046231586,-0.04111695,0.019623479,0.043178685,-0.02680814,-0.012688753,-0.093100645,-0.099095896,-0.099029,-0.0456557,0.026688091,0.047160264,-0.111834526,-0.15907145,0.038655784,-0.008658624,0.053102735,0.045941867,-0.0071778004,-0.05559468,-0.054821365,0.014727849,0.034523856,0.04892965,-0.041812096,-0.10966708,-8.8548226e-33,0.036258735,-0.089815274,-0.0024551537,0.016952904,0.006735849,-0.006175821,-0.010266196,-0.0408104,-0.016148029,-0.041602384,-0.020076307,-0.023733463,-0.012204641,-0.0005572622,0.023732089,0.09622569,-0.054310586,-0.0856234,-0.032710344,0.08740116,-0.09168848,0.12975617,-0.0121263955,0.07172576,0.029247154,-0.009251144,0.01749852,0.06867894,-0.061745632,0.02710136,-0.009271004,0.005565434,-0.11239991,0.02145791,-0.055018958,-0.068966605,-0.009790756,0.011197281,-0.020255297,0.057453357,0.11600548,0.001207037,-0.0045484793,-0.032368723,-0.014711691,0.058828104,-0.026114862,0.042442318,-0.06704003,-0.04195172,0.030603576,-0.06949187,-0.045576446,-0.083181314,0.036017496,-0.01867086,-0.0034360276,0.004508747,-0.091884315,-0.057744272,-0.03227699,0.0035414533,-0.028161068,0.05335814,0.016453223,-0.0823956,-0.04252224,0.022060178,-0.038542792,-0.017786097,-0.080535576,0.020168988,0.082733825,-0.01434703,0.055510655,0.061690707,0.029267041,-0.06239571,0.023365969,0.02244223,-0.11071665,0.04417065,0.059497446,-0.009461929,0.016118018,-0.040252484,-0.06160795,0.08551336,-0.029046496,0.022783421,0.01697328,-0.015472933,0.005979946,0.060514864,-0.06596763,-5.557849e-8,-0.034552965,-0.042470533,-0.09205119,0.061506066,0.026288848,-0.01689719,0.087197445,0.058481667,-0.07038261,0.004148742,0.03772295,0.04601856,-0.048286,0.028859738,-0.020575924,-0.005055334,0.07723139,0.029139798,-0.019593885,-0.09287415,0.018652162,-0.043838017,0.01806332,0.0038451042,0.059585128,0.0001409374,-0.03621539,0.047571637,-0.02851259,-0.01793461,0.017180303,-0.02885775,-0.00598941,0.013358824,0.10917024,-0.028572368,0.045580305,-0.0049019125,-0.075379975,0.0031258666,0.040546734,0.032387834,-0.022210399,-0.00022026418,-0.017276138,-0.023419239,-0.0011505146,0.009191189,0.10989403,-0.00017771432,0.010355756,-0.07216884,0.04990633,0.06335375,0.079219624,0.036822148,0.040446993,0.02329027,-0.0005296125,-0.063731596,0.059234027,0.013571943,0.011372557,0.0020857872],"createdAt":"$D2026-03-21T15:57:01.044Z","updatedAt":"$D2026-03-21T17:26:34.367Z","deletedAt":null}]}]
