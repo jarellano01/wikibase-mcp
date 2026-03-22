@@ -51,7 +51,10 @@ function blockSnippet(block: Block): string {
 // ---------------------------------------------------------------------------
 // Layout
 // ---------------------------------------------------------------------------
-function layout(title: string, body: string, searchQuery = ""): string {
+function layout(title: string, body: string, searchQuery = "", isDash = false): string {
+  const homeHref = isDash ? "/dash" : "/";
+  const searchAction = isDash ? "/dash/search" : "/search";
+  const navLabel = isDash ? "⚙ Dashboard" : "ai-wiki";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,8 +168,8 @@ function layout(title: string, body: string, searchQuery = ""): string {
 </head>
 <body hx-boost="true">
   <nav>
-    <a href="/">ai-wiki</a>
-    <form method="get" action="/search">
+    <a href="${homeHref}">${navLabel}</a>
+    <form method="get" action="${searchAction}">
       <input name="q" placeholder="Search…" value="${h(searchQuery)}" />
       <button type="submit">Search</button>
     </form>
@@ -302,10 +305,10 @@ async function sidebarThreadsHtml(entryBlocks: Block[], entryId: string): Promis
 // ---------------------------------------------------------------------------
 // Entry list item
 // ---------------------------------------------------------------------------
-function entryItem(e: Awaited<ReturnType<typeof listEntries>>[number], activeTag?: string): string {
+function entryItem(e: Awaited<ReturnType<typeof listEntries>>[number], activeTag?: string, basePath = "/"): string {
   const tagsHtml = [
-    `<a class="tag${e.type === activeTag ? " active" : ""}" href="/?type=${h(e.type)}">${h(e.type)}</a>`,
-    ...e.tags.map((t) => `<a class="tag${t === activeTag ? " active" : ""}" href="/?tag=${h(t)}">${h(t)}</a>`),
+    `<a class="tag${e.type === activeTag ? " active" : ""}" href="${basePath}?type=${h(e.type)}">${h(e.type)}</a>`,
+    ...e.tags.map((t) => `<a class="tag${t === activeTag ? " active" : ""}" href="${basePath}?tag=${h(t)}">${h(t)}</a>`),
   ].join(" ");
   return `
     <li class="entry-item">
@@ -323,6 +326,15 @@ function entryItem(e: Awaited<ReturnType<typeof listEntries>>[number], activeTag
 const app = new Hono();
 
 app.get("/", async (c) => {
+  const all = await listEntries(500);
+  const posts = all.filter((e) => e.type === "post");
+  return c.html(layout("Blog", `
+    <h2 style="margin-top:0">Posts</h2>
+    <ul class="entry-list">${posts.map((e) => entryItem(e)).join("") || '<p style="color:#888">No posts yet.</p>'}</ul>
+  `));
+});
+
+app.get("/dash", async (c) => {
   const filterTag = c.req.query("tag")?.trim();
   const filterType = c.req.query("type")?.trim();
   const all = await listEntries(500);
@@ -333,18 +345,32 @@ app.get("/", async (c) => {
   });
   const activeFilter = filterTag ?? filterType;
   const filtersBar = activeFilter
-    ? `<div class="filters"><span>Filtered by:</span> <a class="tag active" href="#">${h(activeFilter)}</a> <a href="/" style="font-size:.8rem;color:#888">✕ clear</a></div>`
+    ? `<div class="filters"><span>Filtered by:</span> <a class="tag active" href="#">${h(activeFilter)}</a> <a href="/dash" style="font-size:.8rem;color:#888">✕ clear</a></div>`
     : "";
-  return c.html(layout("Home", `
-    <h2 style="margin-top:0">Entries</h2>
+  return c.html(layout("Dashboard", `
+    <h2 style="margin-top:0">All Entries</h2>
     ${filtersBar}
-    <ul class="entry-list">${filtered.map((e) => entryItem(e, activeFilter)).join("") || '<p style="color:#888">No entries match.</p>'}</ul>
-  `));
+    <ul class="entry-list">${filtered.map((e) => entryItem(e, activeFilter, "/dash")).join("") || '<p style="color:#888">No entries match.</p>'}</ul>
+  `, "", true));
 });
 
 app.get("/search", async (c) => {
   const q = c.req.query("q")?.trim() ?? "";
   if (!q) return c.redirect("/");
+  const queryEmbedding = await generateEmbedding(q);
+  const results = (await searchEntries(q, queryEmbedding)).filter((e) => e.type === "post");
+  const items = results.length === 0
+    ? `<p style="color:#888">No results for "${h(q)}"</p>`
+    : results.map((e) => entryItem(e)).join("");
+  return c.html(layout(`Search: ${q}`, `
+    <h2 style="margin-top:0">Results for "<em>${h(q)}</em>"</h2>
+    <ul class="entry-list">${items}</ul>
+  `, q));
+});
+
+app.get("/dash/search", async (c) => {
+  const q = c.req.query("q")?.trim() ?? "";
+  if (!q) return c.redirect("/dash");
   const queryEmbedding = await generateEmbedding(q);
   const results = await searchEntries(q, queryEmbedding);
   const items = results.length === 0
@@ -353,7 +379,7 @@ app.get("/search", async (c) => {
   return c.html(layout(`Search: ${q}`, `
     <h2 style="margin-top:0">Results for "<em>${h(q)}</em>"</h2>
     <ul class="entry-list">${items}</ul>
-  `, q));
+  `, q, true));
 });
 
 app.get("/entries/:id", async (c) => {
@@ -410,7 +436,7 @@ app.get("/entries/:id", async (c) => {
     </aside>`;
 
   return c.html(layout(entry.title, `
-    <p style="margin:0 0 1.5rem"><a href="/">← Back</a></p>
+    <p style="margin:0 0 1.5rem"><a href="javascript:history.back()">← Back</a></p>
     <h2 style="margin-top:0">${h(entry.title)}</h2>
     <div class="meta">
       <a class="tag" href="/?type=${h(entry.type)}">${h(entry.type)}</a>
