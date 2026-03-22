@@ -26,9 +26,13 @@ function renderBlock(block: Block): string {
   if (block.type === "image") {
     const meta = block.metadata as { src?: string; alt?: string; caption?: string } | null;
     if (!meta?.src) return "";
+    const isSvg = meta.src.toLowerCase().endsWith(".svg");
+    const mediaEl = isSvg
+      ? `<object data="${h(meta.src)}" type="image/svg+xml" style="max-width:100%;border-radius:6px">${h(meta.alt ?? "")}</object>`
+      : `<img src="${h(meta.src)}" alt="${h(meta.alt ?? "")}" style="max-width:100%;border-radius:6px" />`;
     return `
       <figure style="margin:1.5rem 0;text-align:center">
-        <img src="${h(meta.src)}" alt="${h(meta.alt ?? "")}" style="max-width:100%;border-radius:6px" />
+        ${mediaEl}
         ${meta.caption ? `<figcaption style="margin-top:.5rem;color:#888;font-size:.85rem">${h(meta.caption)}</figcaption>` : ""}
       </figure>`;
   }
