@@ -3,7 +3,7 @@ RUN corepack enable && corepack prepare pnpm@10.22.0 --activate
 WORKDIR /app
 
 # Copy workspace manifests first for layer caching
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json ./
 COPY packages/db/package.json packages/db/
 COPY apps/server/package.json apps/server/
 RUN pnpm install --frozen-lockfile
