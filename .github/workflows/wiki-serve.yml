@@ -1,41 +1,22 @@
-name: Knowledge Graph MCP
+name: Wiki Serve
 
 on:
   push:
     branches: [main]
     paths:
-      - "services/knowledge-graph/**"
+      - "apps/server/**"
+      - "packages/db/**"
   pull_request:
     branches: [main]
     paths:
-      - "services/knowledge-graph/**"
+      - "apps/server/**"
+      - "packages/db/**"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-      - uses: pnpm/action-setup@v4
-        with:
-          version: latest
-      - name: Install dependencies
-        working-directory: services/knowledge-graph
-        run: pnpm install --frozen-lockfile
-      - name: Build
-        working-directory: services/knowledge-graph
-        run: pnpm run build
-      - name: Run tests
-        working-directory: services/knowledge-graph
-        run: pnpm test
-
   build-and-push:
-    needs: test
     runs-on: ubuntu-latest
     env:
-      IMAGE: docker.io/jarellano01/knowledge-graph-mcp
+      IMAGE: docker.io/jarellano01/ai-wiki-serve
     steps:
       - uses: actions/checkout@v4
       - name: Log in to Docker Hub
@@ -56,7 +37,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: services/knowledge-graph/Dockerfile
+          file: apps/server/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
