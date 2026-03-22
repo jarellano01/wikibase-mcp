@@ -47,7 +47,10 @@ pnpm dev               # start all apps in parallel
 ## CLI Usage
 
 ```bash
-wiki setup             # first-time setup: DB config + MCP registration
+wiki instance add      # add a database instance (first-time setup)
+wiki instance use      # switch active instance
+wiki instance list     # list all instances
+wiki mcp install       # register MCP server in Claude Desktop
 wiki add               # add a new entry (interactive)
 wiki list              # list recent entries
 wiki search <query>    # full-text search
@@ -58,7 +61,7 @@ wiki serve             # start local web dashboard
 
 ## MCP Setup
 
-After running `wiki setup`, the MCP server is registered in Claude Desktop config automatically. Restart Claude Desktop to activate.
+Run `wiki instance add` to configure a database, then `wiki mcp install` to register the MCP server in Claude Desktop. Restart Claude Desktop to activate.
 
 Manual config if needed (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 

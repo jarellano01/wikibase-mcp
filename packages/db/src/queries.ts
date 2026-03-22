@@ -1,6 +1,6 @@
 import { eq, desc, sql, ilike, or, isNotNull, isNull, and } from "drizzle-orm";
 import { getDb } from "./client.js";
-import { entries } from "./schema.js";
+import { entries, blocks } from "./schema.js";
 import type { NewEntry, Entry } from "./schema.js";
 
 const notDeleted = isNull(entries.deletedAt);
@@ -9,6 +9,25 @@ export async function createEntry(data: NewEntry): Promise<Entry> {
   const db = getDb();
   const [entry] = await db.insert(entries).values(data).returning();
   return entry;
+}
+
+export async function createEntryWithBlock(
+  data: NewEntry,
+  blockContent: string,
+  blockEmbedding?: number[]
+): Promise<Entry> {
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const [entry] = await tx.insert(entries).values(data).returning();
+    await tx.insert(blocks).values({
+      entryId: entry.id,
+      type: "text",
+      content: blockContent,
+      position: 0,
+      embedding: blockEmbedding,
+    });
+    return entry;
+  });
 }
 
 export async function getEntryById(id: string): Promise<Entry | null> {

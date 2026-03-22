@@ -6,10 +6,14 @@ import { searchCommand } from "./commands/search.js";
 import { listCommand } from "./commands/list.js";
 import { deleteCommand } from "./commands/delete.js";
 import { updateCommand } from "./commands/update.js";
-import { setupCommand } from "./commands/setup.js";
+import { mcpCommand } from "./commands/setup.js";
 import { serveCommand } from "./commands/serve.js";
 import { reindexCommand } from "./commands/reindex.js";
 import { exportCommand } from "./commands/export.js";
+import { migrateBlocksCommand } from "./commands/migrate-blocks.js";
+import { importMdCommand } from "./commands/import-md.js";
+import { exportMdCommand } from "./commands/export-md.js";
+import { instanceCommand } from "./commands/instance.js";
 
 const program = new Command();
 
@@ -24,10 +28,14 @@ program.addCommand(searchCommand);
 program.addCommand(listCommand);
 program.addCommand(deleteCommand);
 program.addCommand(updateCommand);
-program.addCommand(setupCommand);
+program.addCommand(mcpCommand);
 program.addCommand(serveCommand);
 program.addCommand(reindexCommand);
 program.addCommand(exportCommand);
+program.addCommand(migrateBlocksCommand);
+program.addCommand(importMdCommand);
+program.addCommand(exportMdCommand);
+program.addCommand(instanceCommand);
 
 program.parseAsync().then(() => {
   // serve keeps the process alive via its child process; all other commands exit

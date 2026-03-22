@@ -7,8 +7,11 @@ let _db: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
 export function getDb() {
   if (_db) return _db;
-
   const client = postgres(getDatabaseUrl());
   _db = drizzle(client, { schema });
   return _db;
+}
+
+export function resetDb(): void {
+  _db = null;
 }

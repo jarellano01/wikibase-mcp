@@ -22,6 +22,20 @@
       "when": 1774117022364,
       "tag": "0002_stiff_nebula",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1774134553169,
+      "tag": "0003_quiet_magma",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1774152373476,
+      "tag": "0004_friendly_quentin_quire",
+      "breakpoints": true
     }
   ]
 }

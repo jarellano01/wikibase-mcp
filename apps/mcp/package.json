@@ -7,11 +7,13 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --outDir dist --external zod --external @modelcontextprotocol/sdk --external @ai-wiki/db --external postgres --external drizzle-orm"
+    "build": "tsup src/index.ts --format esm --outDir dist --external zod --external @modelcontextprotocol/sdk --external @ai-wiki/db --external \"@ai-wiki/db/blocks\" --external \"@ai-wiki/db/embeddings\" --external postgres --external drizzle-orm"
   },
   "dependencies": {
     "@ai-wiki/db": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.8.0",
+    "drizzle-orm": "^0.38.4",
+    "postgres": "^3.4.8",
     "zod": "^3.24.1"
   },
   "devDependencies": {

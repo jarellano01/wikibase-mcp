@@ -2,6 +2,7 @@ import { Command } from "commander";
 import { input, select, editor, confirm } from "@inquirer/prompts";
 import { getEntryById, updateEntry } from "@ai-wiki/db";
 import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { getBlocksByEntry, updateBlock } from "@ai-wiki/db/blocks";
 
 export const updateCommand = new Command("update")
   .description("Update an existing wiki entry")
@@ -53,6 +54,12 @@ export const updateCommand = new Command("update")
       tags,
       embedding,
     });
+
+    if (content !== existing.content) {
+      const existingBlocks = await getBlocksByEntry(id);
+      const textBlock = existingBlocks.find((b) => b.type === "text");
+      if (textBlock) await updateBlock(textBlock.id, content, "human");
+    }
 
     console.log(`\nUpdated: [${updated!.id}] ${updated!.title}`);
   });

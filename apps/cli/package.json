@@ -8,13 +8,17 @@
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --outDir dist --dts --external @ai-wiki/db --external drizzle-orm --external postgres --external @inquirer/prompts --external commander"
+    "build": "tsup src/index.ts --format esm --outDir dist --dts --external @ai-wiki/db --external drizzle-orm --external postgres --external @inquirer/prompts --external commander --external unified --external remark-parse --external mdast-util-to-markdown"
   },
   "dependencies": {
     "@ai-wiki/db": "workspace:*",
     "@inquirer/prompts": "^7.3.2",
+    "cli-table3": "^0.6.5",
     "commander": "^12.1.0",
-    "drizzle-orm": "^0.38.3"
+    "drizzle-orm": "^0.38.3",
+    "mdast-util-to-markdown": "^2.1.2",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5"
   },
   "devDependencies": {
     "@types/node": "^22.19.15",

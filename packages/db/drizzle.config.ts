@@ -8,6 +8,12 @@ function getDbUrl(): string {
   const configPath = join(homedir(), ".config", "ai-wiki", "config.json");
   if (existsSync(configPath)) {
     const config = JSON.parse(readFileSync(configPath, "utf-8"));
+    // Multi-instance format
+    if (config?.instances && config?.selectedInstance) {
+      const instance = config.instances.find((i: { name: string }) => i.name === config.selectedInstance);
+      if (instance?.databaseUrl) return instance.databaseUrl;
+    }
+    // Legacy single-instance format
     if (config?.databaseUrl) return config.databaseUrl;
   }
   return ""; // generate doesn't need a connection; migrate will fail with a clear error

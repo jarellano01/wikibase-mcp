@@ -15,10 +15,15 @@
       "import": "./dist/embeddings.js",
       "default": "./dist/embeddings.js",
       "types": "./dist/embeddings.d.ts"
+    },
+    "./blocks": {
+      "import": "./dist/blockQueries.js",
+      "default": "./dist/blockQueries.js",
+      "types": "./dist/blockQueries.d.ts"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts src/config.ts src/client.ts src/queries.ts src/schema.ts --format esm --outDir dist --dts --external drizzle-orm --external postgres && tsup src/embeddings.ts --format esm --outDir dist --dts --external @huggingface/transformers",
+    "build": "tsup src/index.ts src/config.ts src/client.ts src/queries.ts src/schema.ts --format esm --outDir dist --dts --external drizzle-orm --external postgres && tsup src/embeddings.ts --format esm --outDir dist --dts --external @huggingface/transformers && tsup src/blockQueries.ts --format esm --outDir dist --dts --external drizzle-orm --external postgres --external @huggingface/transformers",
     "generate": "drizzle-kit generate",
     "migrate": "drizzle-kit migrate",
     "studio": "drizzle-kit studio"

@@ -5,6 +5,8 @@ import {
   timestamp,
   index,
   customType,
+  integer,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
@@ -31,6 +33,7 @@ export const entries = aiWikiSchema.table(
     summary: text("summary"),
     tags: text("tags").array().notNull().default(sql`'{}'::text[]`),
     type: text("type").notNull().default("note"),
+    metadata: jsonb("metadata"),
     embedding: vector("embedding", { dimensions: 384 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
@@ -48,3 +51,61 @@ export const entries = aiWikiSchema.table(
 
 export type Entry = typeof entries.$inferSelect;
 export type NewEntry = typeof entries.$inferInsert;
+
+export const blocks = aiWikiSchema.table(
+  "blocks",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    entryId: uuid("entry_id").notNull().references(() => entries.id),
+    type: text("type").notNull(),
+    content: text("content").notNull(),
+    position: integer("position").notNull(),
+    metadata: jsonb("metadata"),
+    embedding: vector("embedding", { dimensions: 384 }),
+    deletedAt: timestamp("deleted_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("blocks_entry_id_idx").on(table.entryId),
+    index("blocks_entry_position_idx").on(table.entryId, table.position),
+  ]
+);
+
+export const blockRevisions = aiWikiSchema.table(
+  "block_revisions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    blockId: uuid("block_id").notNull().references(() => blocks.id),
+    content: text("content").notNull(),
+    source: text("source").notNull(),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("block_revisions_block_id_idx").on(table.blockId),
+  ]
+);
+
+export type Block = typeof blocks.$inferSelect;
+export type NewBlock = typeof blocks.$inferInsert;
+export type BlockRevision = typeof blockRevisions.$inferSelect;
+export type NewBlockRevision = typeof blockRevisions.$inferInsert;
+
+export const blockComments = aiWikiSchema.table(
+  "block_comments",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    blockId: uuid("block_id").notNull().references(() => blocks.id),
+    body: text("body").notNull(),
+    resolved: text("resolved").notNull().default("false"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index("block_comments_block_id_idx").on(table.blockId),
+  ]
+);
+
+export type BlockComment = typeof blockComments.$inferSelect;
+export type NewBlockComment = typeof blockComments.$inferInsert;

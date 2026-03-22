@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { input, select, editor } from "@inquirer/prompts";
-import { createEntry } from "@ai-wiki/db";
+import { createEntryWithBlock } from "@ai-wiki/db";
 import { generateEmbedding } from "@ai-wiki/db/embeddings";
 
 export const addCommand = new Command("add")
@@ -35,6 +35,10 @@ export const addCommand = new Command("add")
     const embedding = await generateEmbedding(`${title} ${summary || ""} ${content}`);
     process.stdout.write(" done\n");
 
-    const entry = await createEntry({ title, type, content, summary: summary || null, tags, embedding });
+    const entry = await createEntryWithBlock(
+      { title, type, content, summary: summary || null, tags, embedding },
+      content,
+      embedding
+    );
     console.log(`\nAdded: [${entry.id}] ${entry.title}`);
   });

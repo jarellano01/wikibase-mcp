@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, useMemo } from "react";
 import type { Entry } from "@ai-wiki/db";
 
-const ENTRY_TYPES = ["note", "idea", "article", "thought"];
+const ENTRY_TYPES = ["note", "idea", "article", "thought", "post"];
 
 const pill = (label: string, onClick: () => void, active = false) => (
   <button
@@ -84,6 +84,23 @@ export function EntryList({ entries }: { entries: Entry[] }) {
                 {entry.title}
               </Link>
               <span style={{ marginLeft: "0.5rem", color: "#888", fontSize: "0.85rem" }}>{entry.type}</span>
+              {entry.type === "post" && (() => {
+                const status = (entry.metadata as { status?: string } | null)?.status;
+                if (!status) return null;
+                const published = status === "published";
+                return (
+                  <span style={{
+                    marginLeft: "0.4rem",
+                    fontSize: "0.75rem",
+                    padding: "0.1rem 0.4rem",
+                    borderRadius: 999,
+                    background: published ? "#d1fae5" : "#fef9c3",
+                    color: published ? "#065f46" : "#854d0e",
+                  }}>
+                    {status}
+                  </span>
+                );
+              })()}
               {entry.summary && <p style={{ margin: "0.25rem 0 0", color: "#555" }}>{entry.summary}</p>}
               {entry.tags.length > 0 && (
                 <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap", marginTop: "0.4rem" }}>
