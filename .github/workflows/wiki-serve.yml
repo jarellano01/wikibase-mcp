@@ -3,16 +3,8 @@ name: Wiki Serve
 on:
   push:
     branches: [main]
-    paths:
-      - "apps/server/**"
-      - "packages/db/**"
-      - ".github/workflows/wiki-serve.yml"
   pull_request:
     branches: [main]
-    paths:
-      - "apps/server/**"
-      - "packages/db/**"
-      - ".github/workflows/wiki-serve.yml"
 
 jobs:
   build-and-push:
