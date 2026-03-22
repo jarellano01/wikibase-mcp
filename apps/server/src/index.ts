@@ -18,7 +18,15 @@ import {
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 
 function renderMarkdown(content: string): string {
-  return marked.parse(content) as string;
+  const html = marked.parse(content) as string;
+  return html.replace(
+    /<img([^>]*?)src="([^"]*\.svg)"([^>]*?)>/gi,
+    (_, before, src, after) => {
+      const altMatch = (before + after).match(/alt="([^"]*)"/);
+      const alt = altMatch ? altMatch[1] : "";
+      return `<object data="${src}" type="image/svg+xml" style="max-width:100%">${alt}</object>`;
+    }
+  );
 }
 
 function renderBlock(block: Block): string {
@@ -185,7 +193,7 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
     // Click anywhere on a block — activate for commenting
     // Guard: if the click ended a drag-select, preserve the selection and skip focus change
     function handleBlockClick(blockId, event) {
-      if (event.target.closest('a, button, input, textarea')) return;
+      if (event.target.closest('a, button, input, textarea, object')) return;
       if (window.getSelection()?.toString().length > 0) return;
       openComment(blockId);
     }
