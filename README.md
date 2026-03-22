@@ -17,17 +17,35 @@ packages/db  → Drizzle schema, migrations, shared queries
 
 All apps share `packages/db` and hit the same Postgres database.
 
-## Setup
+## Installation
 
 **Prerequisites:** Node.js 20+, PostgreSQL (or [Neon](https://neon.tech) for a free hosted option), pnpm
 
+### Clone and build (current method)
+
 ```bash
+git clone https://github.com/jarellano01/wikibase-mcp.git
+cd wikibase-mcp
 pnpm install
+pnpm build
+```
+
+Then link the CLI globally:
+
+```bash
+npm link --global ./apps/cli
+```
+
+> **Why not `npm install -g github:jarellano01/wikibase-mcp`?**
+> This is a monorepo with workspace dependencies — the CLI depends on `@ai-wiki/db` via `workspace:*`, which doesn't resolve when installing from a GitHub URL. npm publishing is planned; once `@ai-wiki/cli` is on the registry you'll be able to run `npm install -g @ai-wiki/cli`.
+
+### After installation
+
+```bash
 cp .env.example .env
 # Fill in DATABASE_URL in .env
 
 pnpm db:migrate
-pnpm dev
 ```
 
 ## CLI
