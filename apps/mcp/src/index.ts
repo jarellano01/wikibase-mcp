@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import {
   createEntry,
   createEntryWithBlock,
+  createEntryWithBlocks,
   getEntryById,
   listEntries,
   searchEntries,
@@ -113,11 +114,30 @@ server.tool(
   async ({ title, content, type, summary, tags }) => {
     const warnings = scanForSensitiveData([title, summary ?? "", content].join(" "));
     const embedding = await generateEmbedding(`${title} ${summary ?? ""} ${content}`);
-    const entry = await createEntryWithBlock(
-      { title, content, type, summary, tags: tags ?? [], embedding },
-      content,
-      embedding
-    );
+
+    // Split content into blocks by ## headings
+    const sections = content.split(/(?=\n## )/);
+    const blockContents = sections
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
+    let entry;
+    if (blockContents.length > 1) {
+      const blockEmbeddings = await Promise.all(
+        blockContents.map((s) => generateEmbedding(s))
+      );
+      entry = await createEntryWithBlocks(
+        { title, content, type, summary, tags: tags ?? [], embedding },
+        blockContents.map((c, i) => ({ content: c, embedding: blockEmbeddings[i] }))
+      );
+    } else {
+      entry = await createEntryWithBlock(
+        { title, content, type, summary, tags: tags ?? [], embedding },
+        content,
+        embedding
+      );
+    }
+
     return {
       content: [{ type: "text", text: `Added entry: [${entry.id}] ${entry.title}${formatWarnings(warnings)}` }],
     };
@@ -506,7 +526,7 @@ Entries are composed of ordered blocks. Every entry has at least one \`text\` bl
 - Use \`wiki_blocks_list\` to get a block outline before editing structured entries.
 
 ### Writing
-- \`wiki_add\` creates the entry AND a \`text\` block in one transaction. Always provide a \`summary\`.
+- \`wiki_add\` creates the entry AND splits content into multiple \`text\` blocks by \`## \` headings automatically. Always provide a \`summary\`. Structure content with \`## \` headings to get meaningful block granularity.
 - \`wiki_update\` syncs the \`text\` block automatically when \`content\` changes.
 - For block-level edits: \`wiki_block_get\` → \`wiki_block_update\`. Never skip the get step.
 - Use \`wiki_block_add\` with type \`html\` for rich layouts.

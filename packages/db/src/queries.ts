@@ -30,6 +30,26 @@ export async function createEntryWithBlock(
   });
 }
 
+export async function createEntryWithBlocks(
+  data: NewEntry,
+  blockContents: { content: string; embedding?: number[] }[]
+): Promise<Entry> {
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const [entry] = await tx.insert(entries).values(data).returning();
+    await tx.insert(blocks).values(
+      blockContents.map((b, i) => ({
+        entryId: entry.id,
+        type: "text" as const,
+        content: b.content,
+        position: i,
+        embedding: b.embedding,
+      }))
+    );
+    return entry;
+  });
+}
+
 export async function getEntryById(id: string): Promise<Entry | null> {
   const db = getDb();
   const [entry] = await db
