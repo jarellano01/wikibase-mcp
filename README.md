@@ -123,6 +123,6 @@ pnpm db:studio     # open Drizzle Studio
 - **Embeddings:** all-MiniLM-L6-v2 (local, via HuggingFace Transformers)
 - **CLI:** Commander.js
 - **MCP:** @modelcontextprotocol/sdk (stdio transport)
-- **Web:** Next.js 15
+- **Web:** Hono + marked (server-rendered HTML)
 - **Package manager:** pnpm
 - **Monorepo:** Turborepo
