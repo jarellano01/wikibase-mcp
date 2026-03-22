@@ -145,6 +145,34 @@ server.tool(
 );
 
 server.tool(
+  "wiki_split_blocks",
+  "Split a single-block entry into multiple blocks by ## headings. Use this after wiki_add when an entry was created as one big block.",
+  { entryId: z.string().uuid().describe("Entry UUID to split") },
+  async ({ entryId }) => {
+    const existingBlocks = await getBlocksByEntry(entryId);
+    if (existingBlocks.length !== 1 || existingBlocks[0].type !== "text") {
+      return { content: [{ type: "text", text: `Entry already has ${existingBlocks.length} block(s) — no split needed.` }] };
+    }
+
+    const content = existingBlocks[0].content;
+    const sections = content.split(/(?=\n## )/).map((s) => s.trim()).filter((s) => s.length > 0);
+
+    if (sections.length <= 1) {
+      return { content: [{ type: "text", text: "No ## headings found — nothing to split." }] };
+    }
+
+    const embeddings = await Promise.all(sections.map((s) => generateEmbedding(s)));
+
+    await softDeleteBlock(existingBlocks[0].id);
+    for (let i = 0; i < sections.length; i++) {
+      await createBlock({ entryId, type: "text", content: sections[i], position: i, embedding: embeddings[i] });
+    }
+
+    return { content: [{ type: "text", text: `Split into ${sections.length} blocks.` }] };
+  }
+);
+
+server.tool(
   "wiki_search",
   "Search the AI wiki by semantic similarity",
   { query: z.string().describe("Search query") },
@@ -527,6 +555,7 @@ Entries are composed of ordered blocks. Every entry has at least one \`text\` bl
 
 ### Writing
 - \`wiki_add\` creates the entry AND splits content into multiple \`text\` blocks by \`## \` headings automatically. Always provide a \`summary\`. Structure content with \`## \` headings to get meaningful block granularity.
+- \`wiki_split_blocks\` splits an existing single-block entry into multiple blocks by \`## \` headings. Use this when an entry was created as one big block (e.g. imported or created before auto-splitting).
 - \`wiki_update\` syncs the \`text\` block automatically when \`content\` changes.
 - For block-level edits: \`wiki_block_get\` → \`wiki_block_update\`. Never skip the get step.
 - Use \`wiki_block_add\` with type \`html\` for rich layouts.
