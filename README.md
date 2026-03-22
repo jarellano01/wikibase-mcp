@@ -11,8 +11,7 @@ Most useful thinking that happens inside AI sessions disappears when the tab clo
 ```
 apps/cli     → Human CLI (wiki add, wiki search, wiki get...)
 apps/mcp     → MCP stdio server (Claude uses this in sessions)
-apps/server  → Read-only web dashboard (wiki serve)
-apps/web     → Next.js frontend
+apps/server  → Hono web server (wiki serve / personal blog)
 packages/db  → Drizzle schema, migrations, shared queries
 ```
 
@@ -114,6 +113,80 @@ pnpm db:generate   # generate migration after editing packages/db/src/schema.ts
 pnpm db:migrate    # apply pending migrations
 pnpm db:studio     # open Drizzle Studio
 ```
+
+## Deploying as a Personal Blog (Cloud Run + Cloudflare Tunnel)
+
+The web server (`apps/server`) is published to Docker Hub on every push to `main` as `jarellano01/ai-wiki-serve:<sha>`. You can deploy it to Cloud Run and route custom subdomains to it via a Cloudflare Tunnel — no GCP load balancer required (~$3-4/mo vs ~$18/mo).
+
+### 1. Deploy to Cloud Run
+
+```bash
+gcloud run deploy ai-wiki-serve \
+  --image docker.io/jarellano01/ai-wiki-serve:<sha> \
+  --region us-central1 \
+  --platform managed \
+  --ingress all \
+  --set-env-vars DATABASE_URL=<your-neon-or-postgres-url> \
+  --port 3001 \
+  --min-instances 0 \
+  --max-instances 2
+```
+
+Use `--ingress all` — Cloudflare Tunnel routes traffic via Cloudflare's external network, not GCP's internal network, so `--ingress internal` won't work.
+
+### 2. Set Up Cloudflare Tunnel
+
+Install `cloudflared` and authenticate:
+
+```bash
+brew install cloudflared
+cloudflared tunnel login        # opens browser, saves cert to ~/.cloudflared/
+cloudflared tunnel create wiki  # creates tunnel, saves credentials JSON
+```
+
+Deploy `cloudflared` as a second Cloud Run service using the official image. It needs two secrets:
+- The credentials JSON from the tunnel creation step
+- A config YAML pointing it at your Cloud Run service URL
+
+```yaml
+# config.yaml
+tunnel: <tunnel-id>
+credentials-file: /etc/cf-creds/credentials.json
+
+ingress:
+  - hostname: blog.yourdomain.com
+    service: https://<your-cloud-run-url>
+    originRequest:
+      httpHostHeader: <your-cloud-run-url>  # required — Cloud Run checks the Host header
+  - service: http_status:404
+```
+
+> **Note:** The `httpHostHeader` override is required. Cloud Run validates the `Host` header and returns 404 if it doesn't match a known domain mapping.
+
+Mount the secrets in separate directories (Cloud Run doesn't allow two secrets in the same mount path):
+
+```bash
+gcloud run deploy cloudflared \
+  --image cloudflare/cloudflared:latest \
+  --args="tunnel,--config,/etc/cf-config/config.yaml,run,--protocol,http2" \
+  --set-secrets="/etc/cf-config/config.yaml=cf-tunnel-config:latest" \
+  --set-secrets="/etc/cf-creds/credentials.json=cf-tunnel-creds:latest" \
+  --min-instances 1 \   # must stay alive to hold the tunnel
+  --port 8080 \         # cloudflared --metrics binds here for the health probe
+  --ingress all
+```
+
+Use `--protocol http2` — Cloud Run blocks UDP, which is what QUIC uses.
+
+### 3. DNS
+
+In Cloudflare, add a CNAME for each subdomain pointing to `<tunnel-id>.cfargotunnel.com` with proxying enabled. That's it — SSL is handled automatically.
+
+To add a new service, add one more `ingress` rule to the config and one more CNAME. No infra changes.
+
+---
+
+For a full walkthrough see the [Cloudflare Tunnels as a Free Load Balancer](https://worksmart.dev) post.
 
 ## Stack
 
