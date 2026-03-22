@@ -1,0 +1,1 @@
+ALTER TABLE "ai_wiki"."entries" ADD COLUMN "embedding" vector(384);

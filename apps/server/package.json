@@ -1,0 +1,23 @@
+{
+  "name": "@ai-wiki/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsup src/index.ts --format esm --outDir dist --external @ai-wiki/db",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@ai-wiki/db": "workspace:*",
+    "@hono/node-server": "^1.13.7",
+    "hono": "^4.7.4",
+    "marked": "^15.0.12"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "tsup": "^8.3.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
