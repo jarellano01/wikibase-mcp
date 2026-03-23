@@ -196,7 +196,8 @@ server.tool(
   async ({ id }) => {
     const entry = await getEntryById(id);
     if (!entry) return { content: [{ type: "text", text: `No entry found: ${id}` }] };
-    const text = `# ${entry.title}\nType: ${entry.type} | Tags: ${entry.tags.join(", ") || "none"}\n\n${entry.content}`;
+    const metaLine = `Type: ${entry.type} | Status: ${entry.status} | Tags: ${entry.tags.join(", ") || "none"}`;
+    const text = `# ${entry.title}\n${metaLine}\n\n${entry.content}`;
     return { content: [{ type: "text", text }] };
   }
 );
@@ -211,7 +212,7 @@ server.tool(
       return { content: [{ type: "text", text: "No entries yet." }] };
     }
     const text = results
-      .map((e) => `[${e.id}] ${e.title} (${e.type}) — ${e.summary ?? "no summary"}`)
+      .map((e) => `[${e.id}] ${e.title} (${e.type}, ${e.status}) — ${e.summary ?? "no summary"}`)
       .join("\n");
     return { content: [{ type: "text", text }] };
   }
@@ -225,10 +226,11 @@ server.tool(
     title: z.string().optional().describe("New title"),
     content: z.string().optional().describe("New full content"),
     type: z.enum(["note", "idea", "article", "thought", "post"]).optional(),
+    status: z.enum(["draft", "review", "published"]).optional().describe("Entry status"),
     summary: z.string().optional().describe("New summary"),
     tags: tagsSchema,
   },
-  async ({ id, title, content, type, summary, tags }) => {
+  async ({ id, title, content, type, status, summary, tags }) => {
     const existing = await getEntryById(id);
     if (!existing) return { content: [{ type: "text", text: `No entry found: ${id}` }] };
 
@@ -236,6 +238,7 @@ server.tool(
     if (title !== undefined) patch.title = title;
     if (content !== undefined) patch.content = content;
     if (type !== undefined) patch.type = type;
+    if (status !== undefined) patch.status = status;
     if (summary !== undefined) patch.summary = summary;
     if (tags !== undefined) patch.tags = tags;
 
@@ -419,10 +422,8 @@ server.tool(
   { entryId: z.string().uuid().describe("Post entry UUID") },
   async ({ entryId }) => {
     const canonical = await assembleCanonical(entryId);
-    await updatePostMeta(entryId, {
-      status: "published",
-      publishedAt: new Date().toISOString(),
-    });
+    await updatePostMeta(entryId, { publishedAt: new Date().toISOString() });
+    await updateEntry(entryId, { status: "published" });
     return {
       content: [
         {

@@ -7,24 +7,28 @@ export function Header() {
   const isEntry = pathname.startsWith("/entries/");
 
   return (
-    <header style={{
-      position: "sticky",
-      top: 0,
-      background: "#fff",
-      borderBottom: "1px solid #eee",
-      padding: "1rem 0",
-      marginBottom: "2rem",
-      zIndex: 10,
-      display: "flex",
-      alignItems: "center",
-      gap: "1.5rem",
-    }}>
-      <h1 style={{ margin: 0 }}>AI Wiki</h1>
-      {isEntry && (
-        <Link href="/" style={{ color: "#888", fontSize: "0.9rem", textDecoration: "none" }}>
-          ← Back
+    <header style={{ borderBottom: "1px solid #f3f4f6" }}>
+      <div style={{
+        maxWidth: 1080,
+        margin: "0 auto",
+        padding: "0 1.5rem",
+        height: 56,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}>
+        <Link
+          href="/"
+          style={{ fontWeight: 700, fontSize: "0.9375rem", letterSpacing: "-0.02em", color: "#111827" }}
+        >
+          AI Wiki
         </Link>
-      )}
+        {isEntry && (
+          <Link href="/" style={{ fontSize: "0.8125rem", color: "#9ca3af" }}>
+            ← All posts
+          </Link>
+        )}
+      </div>
     </header>
   );
 }

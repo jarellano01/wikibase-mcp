@@ -33,6 +33,7 @@ export const entries = aiWikiSchema.table(
     summary: text("summary"),
     tags: text("tags").array().notNull().default(sql`'{}'::text[]`),
     type: text("type").notNull().default("note"),
+    status: text("status").notNull().default("draft"),
     metadata: jsonb("metadata"),
     embedding: vector("embedding", { dimensions: 384 }),
     createdAt: timestamp("created_at", { withTimezone: true })

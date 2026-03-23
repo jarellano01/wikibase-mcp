@@ -71,6 +71,22 @@ export async function listEntries(limit = 20, offset = 0): Promise<Entry[]> {
     .offset(offset);
 }
 
+export async function listPublishedPosts(limit = 50): Promise<Entry[]> {
+  const db = getDb();
+  return db
+    .select()
+    .from(entries)
+    .where(
+      and(
+        notDeleted,
+        eq(entries.type, "post"),
+        eq(entries.status, "published")
+      )
+    )
+    .orderBy(desc(entries.createdAt))
+    .limit(limit);
+}
+
 export async function searchEntries(
   query: string,
   queryEmbedding?: number[]

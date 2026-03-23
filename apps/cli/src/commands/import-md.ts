@@ -6,8 +6,8 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { toMarkdown } from "mdast-util-to-markdown";
 import type { RootContent } from "mdast";
-import { createEntry } from "@ai-wiki/db";
-import { createBlock, updatePostMeta } from "@ai-wiki/db/blocks";
+import { createEntry, updateEntry } from "@ai-wiki/db";
+import { createBlock } from "@ai-wiki/db/blocks";
 import { generateEmbedding } from "@ai-wiki/db/embeddings";
 
 // Matches the same type mapping used in migrate-blocks.ts
@@ -109,8 +109,7 @@ export const importMdCommand = new Command("import-md")
       });
     }
 
-    // Set post_meta status to draft
-    await updatePostMeta(entry.id, { status: "draft" });
+    // status defaults to "draft" from the column default — no explicit set needed
 
     console.log(`\nImported "${title}" as draft post.`);
     console.log(`Entry ID: ${entry.id}`);

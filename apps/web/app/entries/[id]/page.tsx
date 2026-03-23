@@ -7,48 +7,35 @@ import type { Block } from "@ai-wiki/db";
 import { getBlocksByEntry } from "@ai-wiki/db/blocks";
 import { SimilarDrawer } from "../../components/SimilarDrawer";
 
-// Shared ReactMarkdown component overrides for code and pre blocks
+interface PostMeta {
+  status?: "draft" | "review" | "published";
+  publishedAt?: string;
+  slug?: string;
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 const markdownComponents = {
   pre: ({ children, ...rest }: ComponentPropsWithoutRef<"pre">) => (
-    <pre
-      {...rest}
-      style={{
-        overflowX: "auto",
-        background: "#f6f8fa",
-        borderRadius: 6,
-        padding: "1rem",
-        fontSize: "0.85em",
-        lineHeight: 1.5,
-      }}
-    >
-      {children}
-    </pre>
+    <pre {...rest}>{children}</pre>
   ),
   code: ({ children, className, ...rest }: ComponentPropsWithoutRef<"code">) => (
-    <code
-      {...rest}
-      className={className}
-      style={{
-        fontFamily: "ui-monospace, monospace",
-        fontSize: className ? "inherit" : "0.875em",
-        background: className ? "transparent" : "#f6f8fa",
-        borderRadius: 3,
-        padding: className ? 0 : "0.2em 0.4em",
-      }}
-    >
-      {children}
-    </code>
+    <code {...rest} className={className}>{children}</code>
   ),
 };
 
-// Metadata shape stored on image blocks
 interface ImageBlockMetadata {
   src: string;
   alt: string;
   caption?: string;
 }
 
-// Renders a single block, with special handling for image type
 function BlockRenderer({ block }: { block: Block }) {
   if (block.type === "html") {
     return <div dangerouslySetInnerHTML={{ __html: block.content }} />;
@@ -58,18 +45,10 @@ function BlockRenderer({ block }: { block: Block }) {
     const meta = block.metadata as ImageBlockMetadata | null;
     if (!meta?.src) return null;
     return (
-      <figure style={{ margin: "1.5rem 0", textAlign: "center" }}>
+      <figure>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={meta.src}
-          alt={meta.alt ?? ""}
-          style={{ maxWidth: "100%", borderRadius: 6 }}
-        />
-        {meta.caption && (
-          <figcaption style={{ marginTop: "0.5rem", color: "#888", fontSize: "0.85rem" }}>
-            {meta.caption}
-          </figcaption>
-        )}
+        <img src={meta.src} alt={meta.alt ?? ""} />
+        {meta.caption && <figcaption>{meta.caption}</figcaption>}
       </figure>
     );
   }
@@ -86,47 +65,73 @@ export async function generateStaticParams() {
   return entries.map((e) => ({ id: e.id }));
 }
 
-
 export default async function EntryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [entry, similar, entryBlocks] = await Promise.all([
-    getEntryById(id),
-    getSimilarEntries(id, 5),
-    getBlocksByEntry(id),
-  ]);
+
+  const entry = await getEntryById(id);
   if (!entry) notFound();
 
+  const meta = entry.metadata as PostMeta | null;
+  const isPublished = entry.status === "published";
+
+  // Published posts have compiled markdown in entry.content — skip block fetch.
+  const [similar, entryBlocks] = await Promise.all([
+    getSimilarEntries(id, 5),
+    isPublished ? Promise.resolve([]) : getBlocksByEntry(id),
+  ]);
+
+  const date = formatDate(
+    (isPublished && meta?.publishedAt) ? meta.publishedAt : entry.createdAt.toISOString()
+  );
+
   return (
-    <div style={{ display: "flex", gap: "3rem", alignItems: "flex-start" }}>
-      <main style={{ flex: "1 1 0", minWidth: 0 }}>
-        <h2 style={{ marginTop: 0 }}>{entry.title}</h2>
-        <div style={{ color: "#888", fontSize: "0.85rem", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.4rem", flexWrap: "wrap" }}>
-          <span>{entry.type}</span>
-          {entry.type === "post" && (() => {
-            const status = (entry.metadata as { status?: string } | null)?.status;
-            if (!status) return null;
-            const published = status === "published";
-            return (
+    <div style={{ display: "flex", gap: "3.5rem", alignItems: "flex-start" }}>
+      <article style={{ flex: "1 1 0", minWidth: 0, maxWidth: 680 }}>
+        <header className="article-header">
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", flexWrap: "wrap" }}>
+            <h1 className="article-title" style={{ flex: "1 1 0", minWidth: 0 }}>{entry.title}</h1>
+            {entry.status !== "published" && (
               <span style={{
-                fontSize: "0.75rem",
-                padding: "0.1rem 0.4rem",
-                borderRadius: 999,
-                background: published ? "#d1fae5" : "#fef9c3",
-                color: published ? "#065f46" : "#854d0e",
+                flexShrink: 0,
+                marginTop: "0.45rem",
+                fontSize: "0.6875rem",
+                fontWeight: 600,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                padding: "0.25em 0.6em",
+                borderRadius: 4,
+                background: entry.status === "review" ? "#eff6ff" : "#fefce8",
+                color: entry.status === "review" ? "#1d4ed8" : "#a16207",
+                border: `1px solid ${entry.status === "review" ? "#bfdbfe" : "#fde68a"}`,
               }}>
-                {status}
+                {entry.status}
               </span>
-            );
-          })()}
-          <span>· {entry.tags.join(", ")} · {new Date(entry.createdAt).toLocaleDateString()}</span>
-        </div>
-        {entry.summary && (
-          <blockquote style={{ borderLeft: "3px solid #ddd", paddingLeft: "1rem", color: "#555", margin: "0 0 1.5rem" }}>
-            {entry.summary}
-          </blockquote>
-        )}
-        <div style={{ lineHeight: 1.7 }}>
-          {(() => {
+            )}
+          </div>
+          <div className="article-meta">
+            <time dateTime={entry.createdAt.toISOString()}>{date}</time>
+            {entry.tags.length > 0 && (
+              <>
+                <span style={{ color: "#e5e7eb" }}>·</span>
+                <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
+                  {entry.tags.map((tag) => (
+                    <span key={tag} className="tag">{tag}</span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          {entry.summary && (
+            <p className="article-summary">{entry.summary}</p>
+          )}
+        </header>
+
+        <div className="prose">
+          {isPublished ? (
+            <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
+              {entry.content}
+            </ReactMarkdown>
+          ) : (() => {
             const hasTextBlocks = entryBlocks.some((b) => b.type !== "image");
             if (hasTextBlocks) {
               return entryBlocks.map((block) => (
@@ -147,7 +152,7 @@ export default async function EntryPage({ params }: { params: Promise<{ id: stri
             );
           })()}
         </div>
-      </main>
+      </article>
 
       <SimilarDrawer similar={similar} />
     </div>

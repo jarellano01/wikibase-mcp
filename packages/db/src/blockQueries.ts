@@ -17,7 +17,6 @@ const notDeleted = isNull(blocks.deletedAt);
 
 export interface PostMeta {
   slug?: string;
-  status?: "draft" | "review" | "published";
   canonical?: string;
   publishedAt?: string | null;
 }
@@ -322,8 +321,30 @@ export async function resolveComment(id: string): Promise<BlockComment | null> {
 // --- Canonical assembly ---
 
 export async function assembleCanonical(entryId: string): Promise<string> {
+  const db = getDb();
   const activeBlocks = await getBlocksByEntry(entryId);
-  const canonical = activeBlocks.map((b) => b.content).join("\n\n");
+
+  const parts = activeBlocks
+    .map((b) => {
+      if (b.type === "image") {
+        const meta = b.metadata as { src?: string; alt?: string; caption?: string } | null;
+        if (!meta?.src) return "";
+        const imgLine = `![${meta.alt ?? ""}](${meta.src})`;
+        return meta.caption ? `${imgLine}\n*${meta.caption}*` : imgLine;
+      }
+      return b.content;
+    })
+    .filter(Boolean);
+
+  const canonical = parts.join("\n\n");
+
   await updatePostMeta(entryId, { canonical });
+  // Write compiled markdown to entries.content so the web page can render
+  // published posts without querying blocks at all.
+  await db
+    .update(entries)
+    .set({ content: canonical, updatedAt: new Date() })
+    .where(eq(entries.id, entryId));
+
   return canonical;
 }

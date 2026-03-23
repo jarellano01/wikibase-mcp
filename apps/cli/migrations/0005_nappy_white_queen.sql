@@ -1,0 +1,1 @@
+ALTER TABLE "ai_wiki"."entries" ADD COLUMN "status" text DEFAULT 'draft' NOT NULL;

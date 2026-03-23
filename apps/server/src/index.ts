@@ -101,8 +101,7 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
     .filters span { font-size: .8rem; color: #888; }
 
     /* Entry detail layout */
-    .entry-layout { display: flex; gap: 2rem; align-items: flex-start; }
-    .article { flex: 1; min-width: 0; line-height: 1.7; }
+    .entry-layout { line-height: 1.7; }
 
     /* Blocks */
     .block-wrap { position: relative; padding-left: .75rem; border-left: 3px solid transparent; transition: border-color .2s; }
@@ -110,20 +109,48 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
     .block-wrap.selected { border-left-color: #6366f1; background: #fafafa; border-radius: 0 4px 4px 0; }
     .block-wrap.flash { border-left-color: #6366f1 !important; background: #f5f3ff; border-radius: 4px; transition: none; }
 
-    /* Comments sidebar */
-    .comments-sidebar {
-      width: 290px; flex-shrink: 0;
-      position: sticky; top: 1.5rem;
-      max-height: calc(100vh - 3rem); overflow-y: auto;
-      background: #fff; border: 1px solid #e5e7eb;
-      border-radius: 10px; display: flex; flex-direction: column;
+    /* Comments drawer */
+    .drawer-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.2);
+      z-index: 99; opacity: 0; pointer-events: none;
+      transition: opacity 0.25s ease;
     }
+    .drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    .comments-sidebar {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: min(360px, 100vw);
+      background: #fff;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+      z-index: 100;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+    }
+    .comments-sidebar.open { transform: translateX(0); }
+
+    .comments-fab {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #333; color: #fff; border: none; cursor: pointer;
+      z-index: 98; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .comments-fab:hover { background: #111; }
+
     .sidebar-header {
       padding: .75rem 1rem; border-bottom: 1px solid #f0f0f0;
       font-size: .9rem; font-weight: 600; color: #374151;
       display: flex; align-items: center; gap: .4rem; flex-shrink: 0;
     }
     .sidebar-header .count { color: #9ca3af; font-weight: 400; }
+    .sidebar-header .close-btn {
+      margin-left: auto; background: none; border: none; cursor: pointer;
+      color: #9ca3af; padding: 2px; line-height: 1; font-size: 1rem;
+    }
+    .sidebar-header .close-btn:hover { color: #374151; }
     #sidebar-threads { flex: 1; overflow-y: auto; padding: .5rem 0; }
     .no-comments { color: #9ca3af; font-size: .85rem; text-align: center; padding: 1.5rem 1rem; margin: 0; }
 
@@ -190,6 +217,16 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
   <script>
     let activeBlockId = null;
 
+    function openDrawer() {
+      document.getElementById('comments-drawer')?.classList.add('open');
+      document.getElementById('drawer-backdrop')?.classList.add('open');
+    }
+
+    function closeDrawer() {
+      document.getElementById('comments-drawer')?.classList.remove('open');
+      document.getElementById('drawer-backdrop')?.classList.remove('open');
+    }
+
     // Click anywhere on a block — activate for commenting
     // Guard: if the click ended a drag-select, preserve the selection and skip focus change
     function handleBlockClick(blockId, event) {
@@ -200,6 +237,7 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
 
     function openComment(blockId) {
       activeBlockId = blockId;
+      openDrawer();
 
       // Persistent selected state (no auto-clear)
       document.querySelectorAll('.block-wrap').forEach(b => b.classList.remove('selected', 'flash'));
@@ -228,7 +266,7 @@ function layout(title: string, body: string, searchQuery = "", isDash = false): 
       const btn = document.getElementById('comment-submit-btn');
       if (btn) btn.classList.add('ready');
 
-      // Scroll sidebar to add form and focus textarea
+      // Scroll drawer to add form and focus textarea
       const addArea = document.querySelector('.add-comment-area');
       addArea?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       setTimeout(() => document.getElementById('comment-textarea')?.focus(), 100);
@@ -399,10 +437,8 @@ app.get("/entries/:id", async (c) => {
   const [entry, entryBlocks] = await Promise.all([getEntryById(id), getBlocksByEntry(id)]);
   if (!entry) return c.notFound();
 
-  const status = (entry.metadata as { status?: string } | null)?.status;
-  const badgeHtml = status
-    ? `<span class="badge ${status === "published" ? "badge-published" : "badge-draft"}">${h(status)}</span>`
-    : "";
+  const status = entry.status;
+  const badgeHtml = `<span class="badge ${status === "published" ? "badge-published" : "badge-draft"}">${h(status)}</span>`;
   const tagsHtml = entry.tags.map((t) => `<a class="tag" href="/?tag=${h(t)}">${h(t)}</a>`).join(" ");
 
   const hasTextBlocks = entryBlocks.some((b) => b.type !== "image");
@@ -428,13 +464,16 @@ app.get("/entries/:id", async (c) => {
   const { html: threadsHtml, total } = await sidebarThreadsHtml(entryBlocks, id);
 
   const sidebar = `
-    <aside class="comments-sidebar">
+    <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeDrawer()"></div>
+    <button class="comments-fab" onclick="openDrawer()" aria-label="Open comments">💬</button>
+    <aside class="comments-sidebar" id="comments-drawer">
       <div class="sidebar-header">
         💬 Comments <span class="count">${total > 0 ? `(${total})` : ""}</span>
+        <button class="close-btn" onclick="closeDrawer()" aria-label="Close">✕</button>
       </div>
       <div id="sidebar-threads">${threadsHtml}</div>
       <div class="add-comment-area">
-        <div id="add-comment-target" class="add-comment-target">← click 💬 on a block to comment</div>
+        <div id="add-comment-target" class="add-comment-target">← click a block to comment</div>
         <form method="post" action="/entries/${id}/comments"
               hx-post="/entries/${id}/comments"
               hx-target="#sidebar-threads"
@@ -456,10 +495,8 @@ app.get("/entries/:id", async (c) => {
       <span>· ${new Date(entry.createdAt).toLocaleDateString()}</span>
     </div>
     ${entry.summary ? `<blockquote class="entry-summary">${h(entry.summary)}</blockquote>` : ""}
-    <div class="entry-layout">
-      <div class="article">${blocksHtml}${fallbackHtml}</div>
-      ${sidebar}
-    </div>
+    <div class="entry-layout">${blocksHtml}${fallbackHtml}</div>
+    ${sidebar}
   `));
 });
 

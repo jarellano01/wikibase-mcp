@@ -36,6 +36,13 @@
       "when": 1774152373476,
       "tag": "0004_friendly_quentin_quire",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774201863104,
+      "tag": "0005_nappy_white_queen",
+      "breakpoints": true
     }
   ]
 }

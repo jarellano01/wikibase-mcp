@@ -4,7 +4,7 @@ import remarkParse from "remark-parse";
 import { toMarkdown } from "mdast-util-to-markdown";
 import type { RootContent } from "mdast";
 import { getEntryById } from "@ai-wiki/db";
-import { createBlock, getBlocksByEntry, updatePostMeta } from "@ai-wiki/db/blocks";
+import { createBlock, getBlocksByEntry } from "@ai-wiki/db/blocks";
 import { generateEmbedding } from "@ai-wiki/db/embeddings";
 
 function mapNodeType(node: RootContent): string {
@@ -73,7 +73,7 @@ export const migrateBlocksCommand = new Command("migrate-blocks")
     }
 
     if (!opts.dryRun) {
-      if (entry.type === "post") await updatePostMeta(id, { status: "draft" });
+      // status is already set on the entries.status column — no action needed
       console.log(`\n✓ Created ${nodes.length} blocks for entry ${id}`);
     } else {
       console.log(`\nDry run — no blocks written.`);

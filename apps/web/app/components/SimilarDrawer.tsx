@@ -31,14 +31,13 @@ export function SimilarDrawer({ similar }: { similar: Entry[] }) {
         <li key={e.id}>
           <Link
             href={`/entries/${e.id}`}
-            style={{ fontWeight: 500, fontSize: "0.9rem", display: "block" }}
+            style={{ fontWeight: 600, fontSize: "0.875rem", display: "block", color: "#111827", lineHeight: 1.4 }}
             onClick={() => setOpen(false)}
           >
             {e.title}
           </Link>
-          <span style={{ color: "#aaa", fontSize: "0.75rem" }}>{e.type}</span>
           {e.summary && (
-            <p style={{ margin: "0.25rem 0 0", fontSize: "0.8rem", color: "#888", lineHeight: 1.5 }}>
+            <p style={{ margin: "0.3rem 0 0", fontSize: "0.8125rem", color: "#9ca3af", lineHeight: 1.5 }}>
               {e.summary}
             </p>
           )}
@@ -51,18 +50,18 @@ export function SimilarDrawer({ similar }: { similar: Entry[] }) {
   if (!isMobile) {
     return (
       <aside style={{
-        width: 280,
+        width: 240,
         flexShrink: 0,
         position: "sticky",
-        top: 0,
-        maxHeight: "calc(100vh - 5rem)",
+        top: "1.5rem",
+        maxHeight: "calc(100vh - 4rem)",
         overflowY: "auto",
-        borderLeft: "1px solid #eee",
-        paddingLeft: "1.5rem",
+        borderLeft: "1px solid #f3f4f6",
+        paddingLeft: "2rem",
       }}>
-        <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "#aaa", margin: "0 0 1rem" }}>
-          Similar entries
-        </h3>
+        <p style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "#d1d5db", margin: "0 0 1.25rem", fontWeight: 600 }}>
+          Related
+        </p>
         {list}
       </aside>
     );
@@ -130,7 +129,7 @@ export function SimilarDrawer({ similar }: { similar: Entry[] }) {
       }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.25rem 1.25rem 1rem", borderBottom: "1px solid #eee" }}>
           <h3 style={{ margin: 0, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "#aaa" }}>
-            Similar entries
+            Related
           </h3>
           <button
             onClick={() => setOpen(false)}
