@@ -7,7 +7,7 @@ A personal AI knowledge base — store thoughts, ideas, and articles accessible 
 ```
 apps/cli     → Human CLI (wiki add, wiki search, wiki get...)
 apps/mcp     → Local MCP stdio server (Claude uses this in sessions)
-apps/web     → Next.js read-only web dashboard (wiki serve)
+apps/server  → Hono web dashboard (wiki serve) — SSR, blog + review UI
 packages/db  → Drizzle schema, migrations, shared queries
 ```
 
@@ -96,6 +96,6 @@ Manual config if needed (`~/Library/Application Support/Claude/claude_desktop_co
 - **Database**: PostgreSQL (full-text search via tsvector)
 - **CLI**: Commander.js
 - **MCP**: @modelcontextprotocol/sdk (stdio transport)
-- **Web**: Next.js 15
+- **Web**: Hono + Node.js (SSR, HTMX for comments)
 - **Package manager**: pnpm (always use pnpm, never npm or yarn)
 - **Monorepo**: Turborepo
