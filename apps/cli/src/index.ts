@@ -14,6 +14,7 @@ import { migrateBlocksCommand } from "./commands/migrate-blocks.js";
 import { importMdCommand } from "./commands/import-md.js";
 import { exportMdCommand } from "./commands/export-md.js";
 import { instanceCommand } from "./commands/instance.js";
+import { aiHowToCommand } from "./commands/ai-how-to.js";
 
 const program = new Command();
 
@@ -36,6 +37,7 @@ program.addCommand(migrateBlocksCommand);
 program.addCommand(importMdCommand);
 program.addCommand(exportMdCommand);
 program.addCommand(instanceCommand);
+program.addCommand(aiHowToCommand);
 
 program.parseAsync().then(() => {
   // serve keeps the process alive via its child process; all other commands exit

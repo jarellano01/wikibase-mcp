@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // src/index.ts
-import { Command as Command15 } from "commander";
+import { Command as Command16 } from "commander";
 
 // src/commands/add.ts
 import { Command } from "commander";
@@ -760,8 +760,65 @@ instanceCommand.command("remove <name>").description("Remove an instance (cannot
   }
 });
 
+// src/commands/ai-how-to.ts
+import { Command as Command15 } from "commander";
+var INSTRUCTIONS = `
+# Wikibase CLI \u2014 AI Instructions
+
+A personal knowledge base for storing notes, ideas, articles, and research across AI sessions and machines. Everything is stored in PostgreSQL and accessed via the \`wiki\` CLI.
+
+## Data model
+
+### Entry
+The top-level unit. Has:
+- \`id\` (UUID), \`title\`, \`type\` (note | idea | article | thought | post), \`status\` (draft | review | published)
+- \`summary\` \u2014 token-efficient version of the content. Always populate when adding/updating.
+- \`content\` \u2014 full markdown.
+- \`tags\` \u2014 array of strings.
+
+### Block
+Entries are composed of ordered blocks. Every entry has at least one text block mirroring \`content\`. Blocks are the rendering source of truth in the web dashboard. Block edits are auto-snapshotted for rollback.
+
+## CLI commands
+
+\`\`\`
+wiki search <query>        # semantic + full-text search \u2014 returns id, title, type, summary
+wiki get <id|title>        # fetch full entry content by UUID or title
+wiki list [--limit N]      # list recent entries (summaries only)
+wiki add                   # interactive prompt to create a new entry
+wiki update <id>           # interactive prompt to update an entry
+wiki delete <id>           # delete an entry
+wiki instance list         # show configured DB instances and which is active
+wiki instance use <name>   # switch active instance
+wiki instance add          # add a new DB instance (interactive)
+\`\`\`
+
+## Workflow guidelines
+
+### Reading
+- Always \`wiki search <query>\` first \u2014 it returns summaries without loading full content.
+- Use \`wiki get <id>\` only when you need the full content.
+- Use \`wiki list\` when browsing recent entries without a specific query.
+
+### Writing
+- Use \`wiki add\` to create new entries. Always provide a concise summary.
+- Structure content with \`## \` headings \u2014 the system splits these into blocks automatically.
+- Use \`wiki update <id>\` to modify existing entries.
+
+### Instances
+- Multiple DB instances can be configured (e.g. local, remote).
+- Run \`wiki instance list\` to see what's available and which is active.
+- Run \`wiki instance use <name>\` to switch.
+
+## Sensitivity
+- Never store credentials, API keys, private keys, or connection strings as entry content.
+`.trim();
+var aiHowToCommand = new Command15("ai-how-to").description("Print instructions for AI assistants on how to use the wiki CLI").action(() => {
+  console.log(INSTRUCTIONS);
+});
+
 // src/index.ts
-var program = new Command15();
+var program = new Command16();
 program.name("wiki").description("Wikibase \u2014 personal knowledge base for AI sessions").version("0.1.0");
 program.addCommand(addCommand);
 program.addCommand(getCommand);
@@ -777,6 +834,7 @@ program.addCommand(migrateBlocksCommand);
 program.addCommand(importMdCommand);
 program.addCommand(exportMdCommand);
 program.addCommand(instanceCommand);
+program.addCommand(aiHowToCommand);
 program.parseAsync().then(() => {
   if (!process.argv.includes("serve")) process.exit(0);
 });
