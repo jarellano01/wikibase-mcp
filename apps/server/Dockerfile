@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile
 # Copy source and build
 COPY packages/db/ packages/db/
 COPY apps/server/ apps/server/
-RUN pnpm --filter @ai-wiki/db build && pnpm --filter @ai-wiki/server build
+RUN pnpm --filter @wikibase/db build && pnpm --filter @wikibase/server build
 
 FROM node:22-slim
 RUN corepack enable && corepack prepare pnpm@10.22.0 --activate

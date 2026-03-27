@@ -3,7 +3,7 @@ import { readFileSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { homedir } from "os";
 import { execFileSync } from "child_process";
-import { readConfig } from "@ai-wiki/db";
+import { readConfig } from "@wikibase/db";
 
 export const mcpCommand = new Command("mcp")
   .description("Manage the MCP server");
@@ -38,7 +38,7 @@ mcpCommand
         mkdirSync(dir, { recursive: true });
       }
       const servers = (cfg.mcpServers as Record<string, unknown>) ?? {};
-      servers["ai-wiki"] = { command };
+      servers["wikibase"] = { command };
       cfg.mcpServers = servers;
       writeFileSync(path, JSON.stringify(cfg, null, 2) + "\n");
       console.log(`Claude Desktop: registered in ${path}`);
@@ -51,7 +51,7 @@ mcpCommand
         cfg = JSON.parse(readFileSync(path, "utf-8"));
       }
       const servers = (cfg.mcpServers as Record<string, unknown>) ?? {};
-      servers["ai-wiki"] = { type: "stdio", command, args: [], env: {} };
+      servers["wikibase"] = { type: "stdio", command, args: [], env: {} };
       cfg.mcpServers = servers;
       writeFileSync(path, JSON.stringify(cfg, null, 2) + "\n");
       console.log(`Claude Code:    registered in ${path}`);

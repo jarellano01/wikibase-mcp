@@ -1,8 +1,8 @@
 import { Command } from "commander";
 import { input, select, editor, confirm } from "@inquirer/prompts";
-import { getEntryById, updateEntry } from "@ai-wiki/db";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
-import { getBlocksByEntry, updateBlock } from "@ai-wiki/db/blocks";
+import { getEntryById, updateEntry } from "@wikibase/db";
+import { generateEmbedding } from "@wikibase/db/embeddings";
+import { getBlocksByEntry, updateBlock } from "@wikibase/db/blocks";
 
 export const updateCommand = new Command("update")
   .description("Update an existing wiki entry")

@@ -1,12 +1,9 @@
 import { eq, desc, sql, ilike, or, isNotNull, isNull, and } from "drizzle-orm";
 import { getDb } from "./client.js";
-import { entries, blocks } from "./schema.js";
 import type { NewEntry, Entry } from "./schema.js";
 
-const notDeleted = isNull(entries.deletedAt);
-
 export async function createEntry(data: NewEntry): Promise<Entry> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
   const [entry] = await db.insert(entries).values(data).returning();
   return entry;
 }
@@ -16,7 +13,7 @@ export async function createEntryWithBlock(
   blockContent: string,
   blockEmbedding?: number[]
 ): Promise<Entry> {
-  const db = getDb();
+  const { db, schema: { entries, blocks } } = getDb();
   return db.transaction(async (tx) => {
     const [entry] = await tx.insert(entries).values(data).returning();
     await tx.insert(blocks).values({
@@ -34,7 +31,7 @@ export async function createEntryWithBlocks(
   data: NewEntry,
   blockContents: { content: string; embedding?: number[] }[]
 ): Promise<Entry> {
-  const db = getDb();
+  const { db, schema: { entries, blocks } } = getDb();
   return db.transaction(async (tx) => {
     const [entry] = await tx.insert(entries).values(data).returning();
     await tx.insert(blocks).values(
@@ -51,7 +48,8 @@ export async function createEntryWithBlocks(
 }
 
 export async function getEntryById(id: string): Promise<Entry | null> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   const [entry] = await db
     .select()
     .from(entries)
@@ -61,7 +59,8 @@ export async function getEntryById(id: string): Promise<Entry | null> {
 }
 
 export async function listEntries(limit = 20, offset = 0): Promise<Entry[]> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   return db
     .select()
     .from(entries)
@@ -72,7 +71,8 @@ export async function listEntries(limit = 20, offset = 0): Promise<Entry[]> {
 }
 
 export async function listPublishedPosts(limit = 50): Promise<Entry[]> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   return db
     .select()
     .from(entries)
@@ -91,7 +91,8 @@ export async function searchEntries(
   query: string,
   queryEmbedding?: number[]
 ): Promise<Entry[]> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
 
   if (queryEmbedding) {
     const vectorLiteral = `[${queryEmbedding.join(",")}]`;
@@ -127,7 +128,8 @@ export async function filterEntries(opts: {
   type?: string;
   limit?: number;
 }): Promise<Entry[]> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   const { q, tags, type, limit = 20 } = opts;
   const conditions: Parameters<typeof and>[0][] = [notDeleted];
 
@@ -161,7 +163,8 @@ export async function filterEntries(opts: {
 }
 
 export async function getSimilarEntries(id: string, limit = 5): Promise<Entry[]> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   const [entry] = await db
     .select({ embedding: entries.embedding })
     .from(entries)
@@ -178,7 +181,8 @@ export async function getSimilarEntries(id: string, limit = 5): Promise<Entry[]>
 }
 
 export async function deleteEntry(id: string): Promise<boolean> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   const [entry] = await db
     .update(entries)
     .set({ deletedAt: new Date(), updatedAt: new Date() })
@@ -188,7 +192,7 @@ export async function deleteEntry(id: string): Promise<boolean> {
 }
 
 export async function restoreEntry(id: string): Promise<Entry | null> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
   const [entry] = await db
     .update(entries)
     .set({ deletedAt: null, updatedAt: new Date() })
@@ -201,7 +205,8 @@ export async function updateEntry(
   id: string,
   data: Partial<NewEntry>
 ): Promise<Entry | null> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
+  const notDeleted = isNull(entries.deletedAt);
   const [entry] = await db
     .update(entries)
     .set({ ...data, updatedAt: new Date() })

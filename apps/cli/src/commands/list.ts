@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { listEntries } from "@ai-wiki/db";
+import { listEntries } from "@wikibase/db";
 
 export const listCommand = new Command("list")
   .description("List recent entries")

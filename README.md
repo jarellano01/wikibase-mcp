@@ -19,34 +19,20 @@ All apps share `packages/db` and hit the same Postgres database.
 
 ## Installation
 
-**Prerequisites:** Node.js 20+, PostgreSQL (or [Neon](https://neon.tech) for a free hosted option), pnpm
-
-### Clone and build (current method)
+**Prerequisites:** Node.js 20+, PostgreSQL (or [Neon](https://neon.tech) for a free hosted option)
 
 ```bash
-git clone https://github.com/jarellano01/wikibase-mcp.git
-cd wikibase-mcp
-pnpm install
-pnpm build
+npm install -g github:jarellano01/wikibase-mcp
 ```
 
-Then link the CLI globally:
+Then configure your database:
 
 ```bash
-npm link --global ./apps/cli
+wiki instance add   # prompts for name, DB URL, and schema
+wiki mcp install    # registers the MCP server in Claude Desktop / Claude Code
 ```
 
-> **Why not `npm install -g github:jarellano01/wikibase-mcp`?**
-> This is a monorepo with workspace dependencies — the CLI depends on `@ai-wiki/db` via `workspace:*`, which doesn't resolve when installing from a GitHub URL. npm publishing is planned; once `@ai-wiki/cli` is on the registry you'll be able to run `npm install -g @ai-wiki/cli`.
-
-### After installation
-
-```bash
-cp .env.example .env
-# Fill in DATABASE_URL in .env
-
-pnpm db:migrate
-```
+Restart Claude Desktop. Claude can now read from and write to your knowledge base.
 
 ## CLI
 
@@ -77,7 +63,7 @@ Manual config (`~/Library/Application Support/Claude/claude_desktop_config.json`
 ```json
 {
   "mcpServers": {
-    "ai-wiki": {
+    "wikibase": {
       "command": "wiki-mcp",
       "env": {
         "DATABASE_URL": "your-postgres-url"
@@ -134,13 +120,13 @@ pnpm db:studio     # open Drizzle Studio
 
 ## Deploying as a Personal Blog (Cloud Run + Cloudflare Tunnel)
 
-The web server (`apps/server`) is published to Docker Hub on every push to `main` as `jarellano01/ai-wiki-serve:<sha>`. You can deploy it to Cloud Run and route custom subdomains to it via a Cloudflare Tunnel — no GCP load balancer required (~$3-4/mo vs ~$18/mo).
+The web server (`apps/server`) is published to Docker Hub on every push to `main` as `jarellano01/wikibase-serve:<sha>`. You can deploy it to Cloud Run and route custom subdomains to it via a Cloudflare Tunnel — no GCP load balancer required (~$3-4/mo vs ~$18/mo).
 
 ### 1. Deploy to Cloud Run
 
 ```bash
-gcloud run deploy ai-wiki-serve \
-  --image docker.io/jarellano01/ai-wiki-serve:<sha> \
+gcloud run deploy wikibase-serve \
+  --image docker.io/jarellano01/wikibase-serve:<sha> \
   --region us-central1 \
   --platform managed \
   --ingress all \

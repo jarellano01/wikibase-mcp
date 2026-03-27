@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { confirm } from "@inquirer/prompts";
-import { deleteEntry, getEntryById } from "@ai-wiki/db";
+import { deleteEntry, getEntryById } from "@wikibase/db";
 
 export const deleteCommand = new Command("delete")
   .description("Delete an entry by ID")

@@ -19,7 +19,7 @@ const program = new Command();
 
 program
   .name("wiki")
-  .description("AI Wiki — personal knowledge base for AI sessions")
+  .description("Wikibase — personal knowledge base for AI sessions")
   .version("0.1.0");
 
 program.addCommand(addCommand);

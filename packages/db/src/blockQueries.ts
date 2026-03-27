@@ -1,6 +1,6 @@
 import { eq, desc, sql, isNull, and, asc } from "drizzle-orm";
 import { getDb } from "./client.js";
-import { entries, blocks, blockRevisions, blockComments } from "./schema.js";
+import { getSchemaName } from "./config.js";
 import type { Block, NewBlock, BlockComment } from "./schema.js";
 
 // Dynamic import so web/Next.js builds don't pull in @huggingface/transformers
@@ -8,8 +8,6 @@ async function getEmbedding(text: string): Promise<number[]> {
   const { generateEmbedding } = await import("./embeddings.js");
   return generateEmbedding(text);
 }
-
-const notDeleted = isNull(blocks.deletedAt);
 
 // --- Post metadata helpers ---
 // Post-specific fields are stored in entries.metadata JSONB as:
@@ -22,7 +20,7 @@ export interface PostMeta {
 }
 
 export async function getPostMeta(entryId: string): Promise<PostMeta | null> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
   const [row] = await db
     .select({ metadata: entries.metadata })
     .from(entries)
@@ -32,7 +30,7 @@ export async function getPostMeta(entryId: string): Promise<PostMeta | null> {
 }
 
 export async function updatePostMeta(entryId: string, meta: Partial<PostMeta>): Promise<void> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
   await db
     .update(entries)
     .set({
@@ -47,7 +45,7 @@ export async function updatePostMeta(entryId: string, meta: Partial<PostMeta>): 
 export async function createBlock(
   data: NewBlock & { generateEmbeddingForContent?: boolean }
 ): Promise<Block> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
   const { generateEmbeddingForContent, ...blockData } = data;
   if (generateEmbeddingForContent && blockData.content) {
     blockData.embedding = await getEmbedding(blockData.content);
@@ -57,7 +55,7 @@ export async function createBlock(
 }
 
 export async function getBlock(id: string): Promise<Block | null> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
   const [block] = await db
     .select()
     .from(blocks)
@@ -67,7 +65,8 @@ export async function getBlock(id: string): Promise<Block | null> {
 }
 
 export async function getBlocksByEntry(entryId: string): Promise<Block[]> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
+  const notDeleted = isNull(blocks.deletedAt);
   return db
     .select()
     .from(blocks)
@@ -80,7 +79,8 @@ export async function getBlockWithContext(id: string): Promise<{
   target: Block | null;
   next: Block | null;
 }> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
+  const notDeleted = isNull(blocks.deletedAt);
   const [target] = await db.select().from(blocks).where(eq(blocks.id, id)).limit(1);
   if (!target) return { prev: null, target: null, next: null };
 
@@ -121,7 +121,7 @@ export async function updateBlock(
   source: "human" | "ai-rewrite" | "ai-suggest" | "restructure",
   note?: string
 ): Promise<Block | null> {
-  const db = getDb();
+  const { db, schema: { blocks, blockRevisions } } = getDb();
   const existing = await getBlock(id);
   if (!existing) return null;
 
@@ -148,7 +148,8 @@ export async function updateBlockMetadata(
   id: string,
   metadata: Record<string, unknown>
 ): Promise<Block | null> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
+  const notDeleted = isNull(blocks.deletedAt);
   const [updated] = await db
     .update(blocks)
     .set({ metadata, updatedAt: new Date() })
@@ -158,7 +159,8 @@ export async function updateBlockMetadata(
 }
 
 export async function softDeleteBlock(id: string): Promise<boolean> {
-  const db = getDb();
+  const { db, schema: { blocks } } = getDb();
+  const notDeleted = isNull(blocks.deletedAt);
   const [row] = await db
     .update(blocks)
     .set({ deletedAt: new Date(), updatedAt: new Date() })
@@ -173,7 +175,7 @@ export async function reorderBlocks(
   entryId: string,
   orderedIds: string[]
 ): Promise<void> {
-  const db = getDb();
+  const { db, schema: { blocks, blockRevisions } } = getDb();
   const existing = await getBlocksByEntry(entryId);
 
   await db.transaction(async (tx) => {
@@ -201,7 +203,7 @@ export async function reorderBlocks(
 // --- Rollback ---
 
 export async function rollbackBlock(blockId: string): Promise<Block | null> {
-  const db = getDb();
+  const { db, schema: { blockRevisions } } = getDb();
   const [lastHuman] = await db
     .select()
     .from(blockRevisions)
@@ -229,7 +231,8 @@ export async function findDuplicateBlocks(
     similarity: number;
   }>
 > {
-  const db = getDb();
+  const { db } = getDb();
+  const s = getSchemaName();
   const rows = await db.execute(sql`
     SELECT
       a.id AS block_a,
@@ -237,8 +240,8 @@ export async function findDuplicateBlocks(
       a.content AS content_a,
       b.content AS content_b,
       1 - (a.embedding <=> b.embedding) AS similarity
-    FROM ai_wiki.blocks a
-    JOIN ai_wiki.blocks b ON a.entry_id = b.entry_id AND a.id < b.id
+    FROM ${sql.raw(`"${s}".blocks`)} a
+    JOIN ${sql.raw(`"${s}".blocks`)} b ON a.entry_id = b.entry_id AND a.id < b.id
     WHERE a.entry_id = ${entryId}
       AND a.deleted_at IS NULL
       AND b.deleted_at IS NULL
@@ -267,13 +270,13 @@ export async function findDuplicateBlocks(
 // --- Block comments ---
 
 export async function addBlockComment(blockId: string, body: string): Promise<BlockComment> {
-  const db = getDb();
+  const { db, schema: { blockComments } } = getDb();
   const [comment] = await db.insert(blockComments).values({ blockId, body }).returning();
   return comment;
 }
 
 export async function getCommentsByBlock(blockId: string): Promise<BlockComment[]> {
-  const db = getDb();
+  const { db, schema: { blockComments } } = getDb();
   return db
     .select()
     .from(blockComments)
@@ -284,7 +287,7 @@ export async function getCommentsByBlock(blockId: string): Promise<BlockComment[
 export async function getUnresolvedCommentsByEntry(entryId: string): Promise<
   Array<BlockComment & { blockPosition: number; blockType: string }>
 > {
-  const db = getDb();
+  const { db, schema: { blockComments, blocks } } = getDb();
   const rows = await db
     .select({
       id: blockComments.id,
@@ -309,7 +312,7 @@ export async function getUnresolvedCommentsByEntry(entryId: string): Promise<
 }
 
 export async function resolveComment(id: string): Promise<BlockComment | null> {
-  const db = getDb();
+  const { db, schema: { blockComments } } = getDb();
   const [updated] = await db
     .update(blockComments)
     .set({ resolved: "true", updatedAt: new Date() })
@@ -321,7 +324,7 @@ export async function resolveComment(id: string): Promise<BlockComment | null> {
 // --- Canonical assembly ---
 
 export async function assembleCanonical(entryId: string): Promise<string> {
-  const db = getDb();
+  const { db, schema: { entries } } = getDb();
   const activeBlocks = await getBlocksByEntry(entryId);
 
   const parts = activeBlocks

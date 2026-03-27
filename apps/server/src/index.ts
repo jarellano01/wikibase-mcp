@@ -5,15 +5,15 @@ import {
   listEntries,
   getEntryById,
   searchEntries,
-} from "@ai-wiki/db";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
-import type { Block } from "@ai-wiki/db";
+} from "@wikibase/db";
+import { generateEmbedding } from "@wikibase/db/embeddings";
+import type { Block } from "@wikibase/db";
 import {
   getBlocksByEntry,
   addBlockComment,
   getCommentsByBlock,
   resolveComment,
-} from "@ai-wiki/db/blocks";
+} from "@wikibase/db/blocks";
 
 const PORT = parseInt(process.env.PORT ?? "3001", 10);
 
@@ -979,5 +979,5 @@ app.post("/comments/:id/resolve", async (c) => {
 });
 
 serve({ fetch: app.fetch, port: PORT }, () => {
-  console.log(`ai-wiki server running at http://localhost:${PORT}`);
+  console.log(`wikibase server running at http://localhost:${PORT}`);
 });

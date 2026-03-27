@@ -1,6 +1,6 @@
 import { Command } from "commander";
-import { listEntries, updateEntry } from "@ai-wiki/db";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { listEntries, updateEntry } from "@wikibase/db";
+import { generateEmbedding } from "@wikibase/db/embeddings";
 
 export const reindexCommand = new Command("reindex")
   .description("Backfill embeddings for all entries missing one")

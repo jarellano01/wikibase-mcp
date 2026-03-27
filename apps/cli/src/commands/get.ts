@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { getEntryById } from "@ai-wiki/db";
+import { getEntryById } from "@wikibase/db";
 
 export const getCommand = new Command("get")
   .description("Get a full entry by ID")

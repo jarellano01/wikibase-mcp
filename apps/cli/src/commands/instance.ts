@@ -1,19 +1,39 @@
 import { Command } from "commander";
 import { input, select, confirm } from "@inquirer/prompts";
 import { join } from "path";
+import { mkdtempSync, rmSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { tmpdir } from "os";
 import Table from "cli-table3";
-import { readConfig, addInstance, selectInstance, removeInstance, getDb } from "@ai-wiki/db";
+import { readConfig, addInstance, selectInstance, removeInstance, getDb } from "@wikibase/db";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { sql } from "drizzle-orm";
 import { isDockerAvailable, startDockerPostgres } from "./docker.js";
 
 const migrationsFolder = join(import.meta.dirname, "../migrations");
 
-async function runMigrations(databaseUrl: string): Promise<void> {
+async function runMigrations(databaseUrl: string, schemaName: string): Promise<void> {
   process.env.DATABASE_URL = databaseUrl;
-  const db = getDb();
+  const { db } = getDb();
   await db.execute(sql`CREATE EXTENSION IF NOT EXISTS vector`);
-  await migrate(db, { migrationsFolder });
+
+  // Copy migration files to a temp directory, replacing "ai_wiki" with schemaName
+  // so migrations create the correct schema when schemaName differs from the default.
+  const tempDir = mkdtempSync(join(tmpdir(), "wikibase-migrate-"));
+  try {
+    const files = readdirSync(migrationsFolder);
+    mkdirSync(tempDir, { recursive: true });
+    for (const file of files) {
+      const src = join(migrationsFolder, file);
+      const dest = join(tempDir, file);
+      const content = readFileSync(src, "utf-8");
+      // Replace all occurrences of the default schema name with the target schema
+      const patched = content.replaceAll('"ai_wiki"', `"${schemaName}"`).replaceAll("ai_wiki.", `${schemaName}.`);
+      writeFileSync(dest, patched, "utf-8");
+    }
+    await migrate(db, { migrationsFolder: tempDir });
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
 }
 
 export const instanceCommand = new Command("instance")
@@ -32,8 +52,8 @@ instanceCommand
     const hostWidth = Math.max(20, termWidth - 30);
 
     const table = new Table({
-      head: ["", "NAME", "HOST", "STATUS"],
-      colWidths: [3, 12, hostWidth, 8],
+      head: ["", "NAME", "HOST", "SCHEMA", "STATUS"],
+      colWidths: [3, 12, hostWidth, 12, 8],
       wordWrap: false,
       style: { head: [], border: [] },
     });
@@ -45,7 +65,7 @@ instanceCommand
         display = `${u.protocol}//${u.username}@${u.hostname}${u.pathname}`;
       } catch { /* leave as-is */ }
       const active = inst.name === config.selectedInstance;
-      table.push([active ? "▶" : "", inst.name, display, active ? "active" : ""]);
+      table.push([active ? "▶" : "", inst.name, display, inst.schema ?? "ai_wiki", active ? "active" : ""]);
     }
 
     console.log();
@@ -100,13 +120,18 @@ instanceCommand
       });
     }
 
+    const schemaName = await input({
+      message: "PostgreSQL schema name:",
+      default: "wikibase",
+    });
+
     const shouldSelect = opts.select ?? await confirm({ message: `Make "${name}" the active instance?`, default: true });
-    addInstance(name.trim(), databaseUrl.trim(), shouldSelect);
+    addInstance(name.trim(), databaseUrl.trim(), schemaName.trim(), shouldSelect);
     console.log(`\nInstance "${name}" added${shouldSelect ? " and selected" : ""}.`);
 
     console.log("Running migrations...");
     try {
-      await runMigrations(databaseUrl.trim());
+      await runMigrations(databaseUrl.trim(), schemaName.trim());
       console.log("Migrations complete.");
     } catch (err) {
       console.error("Migration failed:", err);
@@ -128,9 +153,10 @@ instanceCommand
       console.error(`Active instance "${config.selectedInstance}" not found.`);
       process.exit(1);
     }
-    console.log(`Running migrations against "${config.selectedInstance}"...`);
+    const schemaName = instance.schema ?? "ai_wiki";
+    console.log(`Running migrations against "${config.selectedInstance}" (schema: ${schemaName})...`);
     try {
-      await runMigrations(instance.databaseUrl);
+      await runMigrations(instance.databaseUrl, schemaName);
       console.log("Migrations applied successfully.");
     } catch (err) {
       console.error("Migration failed:", (err as Error).message);

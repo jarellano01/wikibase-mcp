@@ -2,6 +2,10 @@ node_modules/
 .env
 .turbo/
 dist/
+!apps/cli/dist/
+!apps/cli/dist/**
+!apps/mcp/dist/
+!apps/mcp/dist/**
 .next/
 out/
 *.tsbuildinfo

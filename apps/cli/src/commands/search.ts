@@ -1,6 +1,6 @@
 import { Command } from "commander";
-import { searchEntries } from "@ai-wiki/db";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { searchEntries } from "@wikibase/db";
+import { generateEmbedding } from "@wikibase/db/embeddings";
 
 export const searchCommand = new Command("search")
   .description("Search entries by semantic similarity or keyword")

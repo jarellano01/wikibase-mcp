@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import { input, select, editor } from "@inquirer/prompts";
-import { createEntryWithBlock } from "@ai-wiki/db";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { createEntryWithBlock } from "@wikibase/db";
+import { generateEmbedding } from "@wikibase/db/embeddings";
 
 export const addCommand = new Command("add")
   .description("Add a new entry to the wiki")

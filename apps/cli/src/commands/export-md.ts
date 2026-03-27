@@ -1,8 +1,8 @@
 import { writeFileSync } from "fs";
 import { join, resolve } from "path";
 import { Command } from "commander";
-import { getEntryById } from "@ai-wiki/db";
-import { getBlocksByEntry } from "@ai-wiki/db/blocks";
+import { getEntryById } from "@wikibase/db";
+import { getBlocksByEntry } from "@wikibase/db/blocks";
 
 /**
  * Slugify a title for use as a filename:

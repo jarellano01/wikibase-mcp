@@ -6,9 +6,9 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { toMarkdown } from "mdast-util-to-markdown";
 import type { RootContent } from "mdast";
-import { createEntry, updateEntry } from "@ai-wiki/db";
-import { createBlock } from "@ai-wiki/db/blocks";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { createEntry, updateEntry } from "@wikibase/db";
+import { createBlock } from "@wikibase/db/blocks";
+import { generateEmbedding } from "@wikibase/db/embeddings";
 
 // Matches the same type mapping used in migrate-blocks.ts
 function mapNodeType(node: RootContent): string {

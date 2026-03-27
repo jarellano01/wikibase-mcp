@@ -1,4 +1,4 @@
-# ai-wiki
+# wikibase-mcp
 
 A personal AI knowledge base — store thoughts, ideas, and articles accessible across machines and AI sessions.
 
@@ -21,8 +21,8 @@ All schema changes MUST go through Drizzle Kit:
 
 ```bash
 # After editing packages/db/src/schema.ts:
-pnpm --filter @ai-wiki/db generate   # generates migration file
-pnpm --filter @ai-wiki/db migrate    # applies migration to DB
+pnpm --filter @wikibase/db generate   # generates migration file
+pnpm --filter @wikibase/db migrate    # applies migration to DB
 ```
 
 Or from the repo root:
@@ -68,7 +68,7 @@ Manual config if needed (`~/Library/Application Support/Claude/claude_desktop_co
 ```json
 {
   "mcpServers": {
-    "ai-wiki": {
+    "wikibase": {
       "command": "wiki-mcp",
       "env": {
         "DATABASE_URL": "your-postgres-url"

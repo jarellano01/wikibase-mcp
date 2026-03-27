@@ -1,13 +1,31 @@
 {
-  "name": "ai-wiki",
-  "private": true,
+  "name": "wikibase-mcp",
+  "version": "0.1.0",
   "packageManager": "pnpm@10.22.0",
+  "type": "module",
+  "bin": {
+    "wiki": "apps/cli/dist/index.js",
+    "wiki-mcp": "apps/cli/dist/mcp.js"
+  },
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "db:generate": "pnpm --filter @ai-wiki/db generate",
-    "db:migrate": "pnpm --filter @ai-wiki/db migrate",
-    "db:studio": "pnpm --filter @ai-wiki/db studio"
+    "db:generate": "pnpm --filter @wikibase/db generate",
+    "db:migrate": "pnpm --filter @wikibase/db migrate",
+    "db:studio": "pnpm --filter @wikibase/db studio"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "@inquirer/prompts": "^7.3.2",
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "drizzle-orm": "^0.38.4",
+    "mdast-util-to-markdown": "^2.1.2",
+    "postgres": "^3.4.8",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "turbo": "^2.3.3",

@@ -1,24 +1,28 @@
 {
-  "name": "@ai-wiki/cli",
+  "name": "@wikibase/cli",
   "version": "0.1.0",
   "type": "module",
   "bin": {
     "wiki": "./dist/index.js",
-    "wiki-mcp": "../mcp/dist/index.js"
+    "wiki-mcp": "./dist/mcp.js"
   },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsup src/index.ts --format esm --outDir dist --dts --external @ai-wiki/db --external drizzle-orm --external postgres --external @inquirer/prompts --external commander --external unified --external remark-parse --external mdast-util-to-markdown"
+    "build": "tsup src/index.ts src/mcp.ts --format esm --outDir dist --dts --external @huggingface/transformers --external drizzle-orm --external postgres --external @inquirer/prompts --external commander --external unified --external remark-parse --external mdast-util-to-markdown --external @modelcontextprotocol/sdk --external zod"
   },
   "dependencies": {
-    "@ai-wiki/db": "workspace:*",
+    "@huggingface/transformers": "^3.8.1",
     "@inquirer/prompts": "^7.3.2",
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "@wikibase/db": "workspace:*",
     "cli-table3": "^0.6.5",
     "commander": "^12.1.0",
     "drizzle-orm": "^0.38.3",
     "mdast-util-to-markdown": "^2.1.2",
+    "postgres": "^3.4.5",
     "remark-parse": "^11.0.0",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/node": "^22.19.15",

@@ -3,9 +3,9 @@ import { unified } from "unified";
 import remarkParse from "remark-parse";
 import { toMarkdown } from "mdast-util-to-markdown";
 import type { RootContent } from "mdast";
-import { getEntryById } from "@ai-wiki/db";
-import { createBlock, getBlocksByEntry } from "@ai-wiki/db/blocks";
-import { generateEmbedding } from "@ai-wiki/db/embeddings";
+import { getEntryById } from "@wikibase/db";
+import { createBlock, getBlocksByEntry } from "@wikibase/db/blocks";
+import { generateEmbedding } from "@wikibase/db/embeddings";
 
 function mapNodeType(node: RootContent): string {
   switch (node.type) {
